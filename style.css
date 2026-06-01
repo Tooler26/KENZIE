@@ -134,7 +134,7 @@ a { color: #1e90ff; text-decoration: none; }
     overflow: hidden;
 }
 
-/* 15x15 Matrix Canvas Mapping Wrapper */
+/* 15x15 Matrix Layout Container */
 .ludo-board-wrapper {
     height: 90vh;
     max-height: 90vw;
@@ -152,10 +152,10 @@ a { color: #1e90ff; text-decoration: none; }
     grid-template-rows: repeat(15, 1fr);
 }
 
-/* --- 3D MOVING TOKENS STYLING RULES --- */
+/* --- TOKEN WRAPPER & HOVER EFFECTS --- */
 .token-wrapper {
-    width: 90%;
-    height: 90%;
+    width: 85%;
+    height: 85%;
     align-self: center;
     justify-self: center;
     position: relative;
@@ -165,65 +165,60 @@ a { color: #1e90ff; text-decoration: none; }
     z-index: 10;
 }
 
-/* High-performance fallback 3D crystalline capsule ring */
-.token-wrapper::before {
-    content: '';
-    position: absolute;
-    width: 75%;
-    height: 75%;
-    border-radius: 50%;
-    bottom: 4px;
-    box-sizing: border-box;
-    border: 2px solid white;
-    box-shadow: inset 0 2px 8px rgba(255,255,255,0.8), 0 4px 12px rgba(0,0,0,0.4);
-    animation: tokenFloat 2s infinite ease-in-out;
-}
-
-/* Specific glowing color schemes for base fallback capsule rings */
-.token-red::before { background: radial-gradient(circle at top, #ff6b81, #ff4757); }
-.token-green::before { background: radial-gradient(circle at top, #2ed573, #26af5f); }
-.token-blue::before { background: radial-gradient(circle at top, #54a0ff, #1e90ff); }
-.token-yellow::before { background: radial-gradient(circle at top, #ffeaa7, #ffa502); }
-
-/* Custom pawn graphics rendering logic layer */
-.token-graphic {
-    width: 80%;
-    height: 80%;
+/* Crops your custom asset pawn image cleanly inside a circular base frame */
+.token-pawn-graphic {
+    width: 90%;
+    height: 90%;
     object-fit: cover;
+    object-position: top center; /* Focuses view perspective on the round pawn head */
     border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.8);
     position: relative;
     z-index: 2;
-    animation: tokenFloat 2s infinite ease-in-out;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    animation: tokenBounce 2s infinite ease-in-out;
 }
 
-/* THE MOVEMENT SHADOW: Reactive scaling shadow disk */
+/* Colored glowing border ring treatments corresponding to player colors */
+.token-red .token-pawn-graphic { border-color: #ff4757; box-shadow: 0 0 8px #ff4757; }
+.token-green .token-pawn-graphic { border-color: #2ed573; box-shadow: 0 0 8px #2ed573; }
+.token-blue .token-pawn-graphic { border-color: #1e90ff; box-shadow: 0 0 8px #1e90ff; }
+.token-yellow .token-pawn-graphic { border-color: #ffa502; box-shadow: 0 0 8px #ffa502; }
+
+/* THE MOVEMENT SHADOW: Scales dynamically in harmony with the pawn bounce */
 .token-ambient-shadow {
     position: absolute;
-    width: 60%;
-    height: 12%;
-    background: rgba(0, 0, 0, 0.65);
+    width: 55%;
+    height: 15%;
+    background: rgba(0, 0, 0, 0.6);
     border-radius: 50%;
-    bottom: -1px;
+    bottom: 2px;
     z-index: 1;
     filter: blur(2px);
-    animation: shadowContract 2s infinite ease-in-out;
-    transform-style: preserve-3d;
+    animation: shadowScale 2s infinite ease-in-out;
 }
 
-/* Continuous Floating Animations */
-@keyframes tokenFloat {
-    0%, 100% { transform: translateY(0px) scale(1); }
-    50%      { transform: translateY(-7px) scale(1.03); } /* Token rises up */
+/* Fallback simple circles used if local asset files fail to load */
+.fallback-circle {
+    background-color: #555;
+    border-radius: 50%;
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
 }
 
-@keyframes shadowContract {
-    0%, 100% { transform: scale(1); opacity: 1; filter: blur(2px); }
-    50%      { transform: scale(0.7); opacity: 0.35; filter: blur(4px); } /* Shadow shrinks and blurs as token moves away */
+/* Smooth Movement Shadow & Hover Keyframes */
+@keyframes tokenBounce {
+    0%, 100% { transform: translateY(0px); }
+    50%      { transform: translateY(-6px); }
 }
 
+@keyframes shadowScale {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%      { transform: scale(0.75); opacity: 0.4; }
+}
 
-/* --- TRUE 3D ENGINE CUBE DICE STYLES --- */
+/* --- ORIGINAL REVERTED DICE BOX LAYOUT --- */
 .game-controls-sidebar {
     width: 260px;
     display: flex;
@@ -242,52 +237,22 @@ a { color: #1e90ff; text-decoration: none; }
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
 }
 
-/* Perspective view portal */
-.dice-3d-scene {
-    width: 100px;
-    height: 100px;
-    perspective: 400px; /* Dictates real-world focal depth distortion */
-    margin: 10px 0;
-}
-
-/* Core rotating body framework */
-.cube-dice {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    transform-style: preserve-3d; /* Forces items to stay drawn in accurate depth planes */
-    transform: rotateX(0deg) rotateY(0deg);
-    transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.3, 1.05); /* Realistic physics deceleration curve */
-}
-
-/* Uniform layout styles across individual faces */
-.cube-face {
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    background: radial-gradient(circle at center, #ffffff, #eccc68);
-    border: 3px solid #ffa502;
-    color: #2f3542;
-    font-size: 5rem;
-    line-height: 94px;
-    text-align: center;
-    border-radius: 18px;
-    box-sizing: border-box;
-    box-shadow: inset 0 0 15px rgba(0,0,0,0.25), 0 0 10px rgba(255, 165, 2, 0.2);
+/* Reverted back to your clean original dice presentation view */
+.dice-face {
+    font-size: 4.5rem;
+    color: #ff4757;
+    background: #13131a;
+    width: 90px;
+    height: 90px;
+    line-height: 85px;
+    border-radius: 12px;
+    border: 2px solid #3d3d5c;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
     user-select: none;
 }
-
-/* Spatial positioning offsets to convert flat squares into an enclosed cube */
-.front  { transform: rotateY(  0deg) translateZ(50px); }
-.back   { transform: rotateY(180deg) translateZ(50px); }
-.right  { transform: rotateY( 90deg) translateZ(50px); }
-.left   { transform: rotateY(-90deg) translateZ(50px); }
-.top    { transform: rotateX( 90deg) translateZ(50px); }
-.bottom { transform: rotateX(-90deg) translateZ(50px); }
-
 
 .roll-btn { width: 100%; background: #ff4757; color: white; }
 
@@ -305,7 +270,7 @@ a { color: #1e90ff; text-decoration: none; }
 
 .log-entry { margin: 5px 0; border-bottom: 1px solid #232338; padding-bottom: 4px; }
 
-/* Responsiveness Rules */
+/* Responsiveness adjustments */
 @media (max-width: 850px) {
     .game-arena { flex-direction: column; overflow-y: auto; }
     .ludo-board-wrapper { width: 95vw; height: 95vw; }

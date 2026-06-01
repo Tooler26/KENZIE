@@ -18,90 +18,81 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // --- 3D TOKEN GENERATOR WITH MOVEMENT SHADOWS ---
+    // --- PAWN TOKEN BUILDER ENGINE ---
     const board = document.getElementById('ludo-board');
 
     function spawnToken(color, imageFile, row, col) {
-        // Create an interactive structural outer wrapper locked to grid space
+        // Create the layout cell container
         const tokenWrapper = document.createElement('div');
         tokenWrapper.className = `token-wrapper token-${color}`;
         tokenWrapper.style.gridRowStart = row;
         tokenWrapper.style.gridColumnStart = col;
 
-        // Create the individual physical depth-reactive ambient shadow underneath
+        // Create the movement shadow layer
         const tokenShadow = document.createElement('div');
         tokenShadow.className = 'token-ambient-shadow';
 
-        // Create the actual 3D avatar graphic element
+        // Create the actual pawn image asset element
         const tokenImg = document.createElement('img');
         tokenImg.src = imageFile;
-        tokenImg.className = 'token-graphic';
-        tokenImg.alt = `${color} piece`;
-        
-        // Setup visual image structural safety fallback
+        tokenImg.className = 'token-pawn-graphic';
+        tokenImg.alt = `${color} token`;
+
+        // If your images ever fail to load in workspace environments, fall back gracefully
         tokenImg.onerror = () => {
-            tokenImg.style.display = 'none'; // If file path is broken, CSS 3D fallback base keeps game perfectly playable
+            tokenImg.style.display = 'none';
+            tokenWrapper.classList.add('fallback-circle');
+            tokenWrapper.innerText = color.charAt(0).toUpperCase();
         };
 
-        // Combine structures onto board
         tokenWrapper.appendChild(tokenShadow);
         tokenWrapper.appendChild(tokenImg);
         board.appendChild(tokenWrapper);
     }
 
-    // Deploy tokens directly onto active paths to verify alignment positioning
+    // Place one token on the starting track positions
     spawnToken('red', 'red.jpg', 7, 2);       
     spawnToken('green', 'green.jpg', 2, 9);   
     spawnToken('yellow', 'yellow.jpg', 9, 14); 
     spawnToken('blue', 'blue.jpg', 14, 7);    
 
-    // Place tokens neatly into the middle of home camps
+    // Place tokens into the main base yards matching your board image positions
     spawnToken('red', 'red.jpg', 3, 3);
     spawnToken('green', 'green.jpg', 3, 12);
     spawnToken('yellow', 'yellow.jpg', 12, 12);
     spawnToken('blue', 'blue.jpg', 12, 3);
 
 
-    // --- 3D MATRIX CUBE DICE ENGINE ---
+    // --- ORIGINAL DICE TEXT ROLLING LOGIC ---
     const diceBtn = document.getElementById('roll-dice-btn');
-    const cube = document.getElementById('cube');
+    const visualDice = document.getElementById('visual-dice');
     const logContainer = document.querySelector('.game-log');
 
-    // Mathematical coordinate rotations needed to orient face forward towards the player camera view
-    const faceRotations = {
-        1: { x: 0,    y: 0 },    // Front Face
-        6: { x: 180,  y: 0 },    // Back Face
-        2: { x: 0,    y: 90 },   // Right Face
-        5: { x: 0,    y: -90 },  // Left Face
-        3: { x: 90,   y: 0 },    // Top Face
-        4: { x: -90,  y: 0 }     // Bottom Face
-    };
+    const diceFaces = { 1: '⚀', 2: '⚁', 3: '⚂', 4: '⚃', 5: '⚄', 6: '⚅' };
 
     diceBtn.addEventListener('click', () => {
         diceBtn.disabled = true;
+        let counter = 0;
         
-        // Pick a definitive outcome
-        const finalRoll = Math.floor(Math.random() * 6) + 1;
-        
-        // Add random multi-turn revolutions (spin cycles) to simulate organic velocity physics
-        const extraSpinsX = (Math.floor(Math.random() * 3) + 3) * 360; 
-        const extraSpinsY = (Math.floor(Math.random() * 3) + 3) * 360; 
-
-        const targetX = faceRotations[finalRoll].x + extraSpinsX;
-        const targetY = faceRotations[finalRoll].y + extraSpinsY;
-
-        // Apply global styles causing immediate 3D rolling physics rotation animation
-        cube.style.transform = `rotateX(${targetX}deg) rotateY(${targetY}deg)`;
-
-        // Wait for the CSS transition speed timeline to conclude safely
-        setTimeout(() => {
-            const p = document.createElement('p');
-            p.className = 'log-entry';
-            p.textContent = `You rolled a beautiful 3D ${finalRoll}!`;
-            logContainer.appendChild(p);
-            logContainer.scrollTop = logContainer.scrollHeight;
-
-            diceBtn.disabled = false;
-        }, 1200); // Mapped perfectly with CSS animation duration timing
+        // Simulates a shuffle blur roll effect
+        const rollInterval = setInterval(() => {
+            const randomTmp = Math.floor(Math.random() * 6) + 1;
+            visualDice.textContent = diceFaces[randomTmp];
+            counter++;
+            
+            if (counter > 8) {
+                clearInterval(rollInterval);
+                const finalRoll = Math.floor(Math.random() * 6) + 1;
+                visualDice.textContent = diceFaces[finalRoll];
+                
+                const p = document.createElement('p');
+                p.className = 'log-entry';
+                p.textContent = `You rolled a ${finalRoll}!`;
+                logContainer.appendChild(p);
+                logContainer.scrollTop = logContainer.scrollHeight;
+                
+                diceBtn.disabled = false;
+            }
+        }, 80);
     });
 });
