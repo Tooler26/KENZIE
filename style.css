@@ -1,4 +1,6 @@
-/* --- GLOBAL THEME LAYOUT --- */
+/* ==========================================================================
+   1. GLOBAL THEME & AUTHENTICATION LAYOUT
+   ========================================================================== */
 body {
     font-family: Arial, sans-serif;
     background-color: #1e1e2f;
@@ -40,12 +42,29 @@ button {
     margin-top: 10px;
 }
 
-button:hover { background-color: #ff6b81; }
-.toggle-text { margin-top: 15px; font-size: 0.9em; }
-a { color: #1e90ff; text-decoration: none; }
-.error-text { color: #ff4757; font-size: 0.85em; min-height: 20px; }
+button:hover { 
+    background-color: #ff6b81; 
+}
 
-/* --- DASHBOARD HUB STYLES --- */
+.toggle-text { 
+    margin-top: 15px; 
+    font-size: 0.9em; 
+}
+
+a { 
+    color: #1e90ff; 
+    text-decoration: none; 
+}
+
+.error-text { 
+    color: #ff4757; 
+    font-size: 0.85em; 
+    min-height: 20px; 
+}
+
+/* ==========================================================================
+   2. DASHBOARD HUB & MANAGEMENT STYLES
+   ========================================================================== */
 .dashboard-container {
     width: 100%;
     max-width: 800px;
@@ -67,10 +86,29 @@ a { color: #1e90ff; text-decoration: none; }
     border-bottom: 2px solid #3d3d5c;
 }
 
-.user-profile { display: flex; align-items: center; gap: 15px; }
-.avatar { width: 55px; height: 55px; border-radius: 50%; background: #3d3d5c; border: 2px solid #ff4757; }
-.user-info h3 { margin: 0; font-size: 1.1rem; }
-.status-badge { font-size: 0.8rem; color: #2ed573; }
+.user-profile { 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+}
+
+.avatar { 
+    width: 55px; 
+    height: 55px; 
+    border-radius: 50%; 
+    background: #3d3d5c; 
+    border: 2px solid #ff4757; 
+}
+
+.user-info h3 { 
+    margin: 0; 
+    font-size: 1.1rem; 
+}
+
+.status-badge { 
+    font-size: 0.8rem; 
+    color: #2ed573; 
+}
 
 .wallet-card {
     text-align: right;
@@ -79,30 +117,122 @@ a { color: #1e90ff; text-decoration: none; }
     border-radius: 10px;
 }
 
-.wallet-label { font-size: 0.75rem; text-transform: uppercase; opacity: 0.9; }
-.wallet-balance { margin: 0; font-size: 1.4rem; }
+.wallet-label { 
+    font-size: 0.75rem; 
+    text-transform: uppercase; 
+    opacity: 0.9; 
+}
 
-.dashboard-tabs { display: flex; background: #232338; padding: 5px; }
-.tab-btn { flex: 1; background: transparent; border: none; color: #a0a0b8; padding: 15px; font-weight: bold; cursor: pointer; border-radius: 8px; text-align: center; }
-.tab-btn.active { background: #ff4757; color: white; }
-.tab-btn.logout { color: #ff4757; flex: 0.5; }
+.wallet-balance { 
+    margin: 0; 
+    font-size: 1.4rem; 
+}
 
-.dashboard-content { flex: 1; padding: 20px; overflow-y: auto; }
-.tab-view { display: none; }
-.tab-view.active { display: block; }
+.dashboard-tabs { 
+    display: flex; 
+    background: #232338; 
+    padding: 5px; 
+}
 
-.lobby-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.rooms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
-.room-card { background: #3d3d5c; padding: 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border-left: 5px solid #ffa502; }
-.room-details h4 { margin: 0 0 5px 0; }
-.room-details p { margin: 2px 0; font-size: 0.9rem; color: #a0a0b8; }
-.fee-text { color: #2ed573; font-weight: bold; }
+.tab-btn { 
+    flex: 1; 
+    background: transparent; 
+    border: none; 
+    color: #a0a0b8; 
+    padding: 15px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    border-radius: 8px; 
+    text-align: center; 
+}
 
-.join-btn, .action-btn { background: #ffa502; color: #1e1e2f; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-.join-btn:hover, .action-btn:hover { filter: brightness(1.1); }
-.input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; text-align: left; }
+.tab-btn.active { 
+    background: #ff4757; 
+    color: white; 
+}
 
-/* --- LIVE MATCH STYLES & INTERACTIVE GRID --- */
+.tab-btn.logout { 
+    color: #ff4757; 
+    flex: 0.5; 
+}
+
+.dashboard-content { 
+    flex: 1; 
+    padding: 20px; 
+    overflow-y: auto; 
+}
+
+.tab-view { 
+    display: none; 
+}
+
+.tab-view.active { 
+    display: block; 
+}
+
+.lobby-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 20px; 
+}
+
+.rooms-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+    gap: 15px; 
+}
+
+.room-card { 
+    background: #3d3d5c; 
+    padding: 20px; 
+    border-radius: 12px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    border-left: 5px solid #ffa502; 
+}
+
+.room-details h4 { 
+    margin: 0 0 5px 0; 
+}
+
+.room-details p { 
+    margin: 2px 0; 
+    font-size: 0.9rem; 
+    color: #a0a0b8; 
+}
+
+.fee-text { 
+    color: #2ed573; 
+    font-weight: bold; 
+}
+
+.join-btn, .action-btn { 
+    background: #ffa502; 
+    color: #1e1e2f; 
+    border: none; 
+    padding: 12px 20px; 
+    border-radius: 8px; 
+    font-weight: bold; 
+    cursor: pointer; 
+}
+
+.join-btn:hover, .action-btn:hover { 
+    filter: brightness(1.1); 
+}
+
+.input-group { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 8px; 
+    margin-bottom: 15px; 
+    text-align: left; 
+}
+
+/* ==========================================================================
+   3. LIVE MATCH LAYOUT & INTERACTIVE MATRIX GRID
+   ========================================================================== */
 .game-screen-container {
     width: 100vw;
     height: 100vh;
@@ -120,9 +250,25 @@ a { color: #1e90ff; text-decoration: none; }
     border-bottom: 3px solid #ff4757;
 }
 
-.hud-back-btn { background: #3d3d5c; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-.turn-indicator { font-size: 1.1rem; }
+.hud-back-btn { 
+    background: #3d3d5c; 
+    color: white; 
+    border: none; 
+    padding: 8px 16px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    font-weight: bold; 
+}
+
+.turn-indicator { 
+    font-size: 1.1rem; 
+}
+
+/* Turn Tracker Colors */
 .turn-red { color: #ff4757; }
+.turn-green { color: #2ed573; }
+.turn-yellow { color: #ffa502; }
+.turn-blue { color: #1e90ff; }
 
 .game-arena {
     flex: 1;
@@ -134,7 +280,7 @@ a { color: #1e90ff; text-decoration: none; }
     overflow: hidden;
 }
 
-/* 15x15 Matrix Layout Container */
+/* The 15x15 Precise Grid Overlay Map */
 .ludo-board-wrapper {
     height: 90vh;
     max-height: 90vw;
@@ -152,25 +298,27 @@ a { color: #1e90ff; text-decoration: none; }
     grid-template-rows: repeat(15, 1fr);
 }
 
-/* --- TOKEN WRAPPER & HOVER EFFECTS --- */
+/* ==========================================================================
+   4. TOKENS LAYER & HOVER MOTION EFFECTS
+   ========================================================================== */
 .token-wrapper {
-    width: 85%;
-    height: 85%;
-    align-self: center;
-    justify-self: center;
+    width: 80%;
+    height: 80%;
+    margin: auto; /* Guarantees precise structural centering within the grid square cell */
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 10;
+    cursor: pointer;
 }
 
-/* Crops your custom asset pawn image cleanly inside a circular base frame */
+/* Crops rectangular image textures inside safe circular frames */
 .token-pawn-graphic {
-    width: 90%;
-    height: 90%;
+    width: 95%;
+    height: 95%;
     object-fit: cover;
-    object-position: top center; /* Focuses view perspective on the round pawn head */
+    object-position: top center; /* Safeguards focus perspective directly over token head */
     border-radius: 50%;
     border: 2px solid rgba(255, 255, 255, 0.8);
     position: relative;
@@ -179,46 +327,50 @@ a { color: #1e90ff; text-decoration: none; }
     animation: tokenBounce 2s infinite ease-in-out;
 }
 
-/* Colored glowing border ring treatments corresponding to player colors */
-.token-red .token-pawn-graphic { border-color: #ff4757; box-shadow: 0 0 8px #ff4757; }
-.token-green .token-pawn-graphic { border-color: #2ed573; box-shadow: 0 0 8px #2ed573; }
-.token-blue .token-pawn-graphic { border-color: #1e90ff; box-shadow: 0 0 8px #1e90ff; }
-.token-yellow .token-pawn-graphic { border-color: #ffa502; box-shadow: 0 0 8px #ffa502; }
+/* Outer neon glow signatures matching individual player houses */
+.token-red .token-pawn-graphic { border-color: #ff4757; box-shadow: 0 0 10px #ff4757; }
+.token-green .token-pawn-graphic { border-color: #2ed573; box-shadow: 0 0 10px #2ed573; }
+.token-blue .token-pawn-graphic { border-color: #1e90ff; box-shadow: 0 0 10px #1e90ff; }
+.token-yellow .token-pawn-graphic { border-color: #ffa502; box-shadow: 0 0 10px #ffa502; }
 
-/* THE MOVEMENT SHADOW: Scales dynamically in harmony with the pawn bounce */
+/* THE MOVEMENT SHADOW: Contracts automatically as the piece bounces upward */
 .token-ambient-shadow {
     position: absolute;
     width: 55%;
     height: 15%;
     background: rgba(0, 0, 0, 0.6);
     border-radius: 50%;
-    bottom: 2px;
+    bottom: 1px;
     z-index: 1;
     filter: blur(2px);
     animation: shadowScale 2s infinite ease-in-out;
 }
 
-/* Fallback simple circles used if local asset files fail to load */
+/* Fallback base configurations if browser crashes loading path files */
 .fallback-circle {
-    background-color: #555;
+    background-color: #333;
     border-radius: 50%;
     color: white;
     font-weight: bold;
     font-size: 1.1rem;
+    border: 2px solid white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
 }
 
-/* Smooth Movement Shadow & Hover Keyframes */
+/* Floating Animation Chronologies */
 @keyframes tokenBounce {
     0%, 100% { transform: translateY(0px); }
-    50%      { transform: translateY(-6px); }
+    50%      { transform: translateY(-6px); } /* Token Peak height elevation point */
 }
 
 @keyframes shadowScale {
     0%, 100% { transform: scale(1); opacity: 1; }
-    50%      { transform: scale(0.75); opacity: 0.4; }
+    50%      { transform: scale(0.75); opacity: 0.4; } /* Shadows shrink at peak token height */
 }
 
-/* --- ORIGINAL REVERTED DICE BOX LAYOUT --- */
+/* ==========================================================================
+   5. GAME CONTROLS INTERACTIVE SIDEBAR & DICE
+   ========================================================================== */
 .game-controls-sidebar {
     width: 260px;
     display: flex;
@@ -240,7 +392,7 @@ a { color: #1e90ff; text-decoration: none; }
     gap: 15px;
 }
 
-/* Reverted back to your clean original dice presentation view */
+/* Flat reliable Dice component view */
 .dice-face {
     font-size: 4.5rem;
     color: #ff4757;
@@ -248,13 +400,18 @@ a { color: #1e90ff; text-decoration: none; }
     width: 90px;
     height: 90px;
     line-height: 85px;
+    text-align: center;
     border-radius: 12px;
     border: 2px solid #3d3d5c;
     box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
     user-select: none;
 }
 
-.roll-btn { width: 100%; background: #ff4757; color: white; }
+.roll-btn { 
+    width: 100%; 
+    background: #ff4757; 
+    color: white; 
+}
 
 .game-log {
     flex: 1;
@@ -268,11 +425,26 @@ a { color: #1e90ff; text-decoration: none; }
     color: #a0a0b8;
 }
 
-.log-entry { margin: 5px 0; border-bottom: 1px solid #232338; padding-bottom: 4px; }
+.log-entry { 
+    margin: 5px 0; 
+    border-bottom: 1px solid #232338; 
+    padding-bottom: 4px; 
+}
 
-/* Responsiveness adjustments */
+/* ==========================================================================
+   6. RESPONSIVE BREAKPOINTS
+   ========================================================================== */
 @media (max-width: 850px) {
-    .game-arena { flex-direction: column; overflow-y: auto; }
-    .ludo-board-wrapper { width: 95vw; height: 95vw; }
-    .game-controls-sidebar { width: 100%; max-height: none; }
+    .game-arena { 
+        flex-direction: column; 
+        overflow-y: auto; 
+    }
+    .ludo-board-wrapper { 
+        width: 95vw; 
+        height: 95vw; 
+    }
+    .game-controls-sidebar { 
+        width: 100%; 
+        max-height: none; 
+    }
 }
