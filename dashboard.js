@@ -47,6 +47,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
+    // --- LOBBY ROOMS INTERACTION (New Redirect Update) ---
+    const joinButtons = document.querySelectorAll('.join-btn');
+    joinButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Take the user straight into the live game arena
+            window.location.href = 'game.html';
+        });
+    });
+
     // --- LOGOUT ENGINE ---
     document.getElementById('logout-btn').addEventListener('click', async () => {
         await supabaseClient.auth.signOut();
