@@ -3,48 +3,47 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// --- 1. COORDINATE MAPS & TRANSLATION TABLES ---
-// 52 Common Track Array Cells (Row, Column)
+// ==========================================================================
+// 1. FIXED MASTER TRACK CONFIGURATIONS
+// ==========================================================================
 const COMMON_TRACK_COORDS = [
-    {r:7, c:2},  {r:7, c:3},  {r:7, c:4},  {r:7, c:5},  {r:7, c:6},  // Left wing top
-    {r:6, c:7},  {r:5, c:7},  {r:4, c:7},  {r:3, c:7},  {r:2, c:7},  {r:1, c:7}, // Top wing left
-    {r:1, c:8},  // Top middle bridge
-    {r:1, c:9},  {r:2, c:9},  {r:3, c:9},  {r:4, c:9},  {r:5, c:9},  {r:6, c:9}, // Top wing right
-    {r:7, c:10}, {r:7, c:11}, {r:7, c:12}, {r:7, c:13}, {r:7, c:14}, {r:7, c:15}, // Right wing top
-    {r:8, c:15}, // Right middle bridge
-    {r:9, c:14}, {r:9, c:13}, {r:9, c:12}, {r:9, c:11}, {r:9, c:10}, {r:9, c:9},  // Right wing bottom
-    {r:10, c:9}, {r:11, c:9}, {r:12, c:9}, {r:13, c:9}, {r:14, c:9}, {r:15, c:9}, // Bottom wing right
-    {r:15, c:8}, // Bottom middle bridge
-    {r:15, c:7}, {r:14, c:7}, {r:13, c:7}, {r:12, c:7}, {r:11, c:7}, {r:10, c:7}, // Bottom wing left
-    {r:9, c:6},  {r:9, c:5},  {r:9, c:4},  {r:9, c:3},  {r:9, c:2},  {r:9, c:1},  // Left wing bottom
-    {r:8, c:1}   // Left middle bridge
+    {r:7, c:1},  {r:7, c:2},  {r:7, c:3},  {r:7, c:4},  {r:7, c:5},  {r:7, c:6},  // Green Start Runway Area
+    {r:6, c:7},  {r:5, c:7},  {r:4, c:7},  {r:3, c:7},  {r:2, c:7},  {r:1, c:7},  
+    {r:1, c:8},  
+    {r:1, c:9},  {r:2, c:9},  {r:3, c:9},  {r:4, c:9},  {r:5, c:9},  {r:6, c:9},  // Yellow Start Runway Area
+    {r:7, c:10}, {r:7, c:11}, {r:7, c:12}, {r:7, c:13}, {r:7, c:14}, {r:7, c:15}, 
+    {r:8, c:15}, 
+    {r:9, c:15}, {r:9, c:14}, {r:9, c:13}, {r:9, c:12}, {r:9, c:11}, {r:9, c:10}, // Blue Start Runway Area
+    {r:10, c:9}, {r:11, c:9}, {r:12, c:9}, {r:13, c:9}, {r:14, c:9}, {r:15, c:9}, 
+    {r:15, c:8}, 
+    {r:15, c:7}, {r:14, c:7}, {r:13, c:7}, {r:12, c:7}, {r:11, c:7}, {r:10, c:7}, // Red Start Runway Area
+    {r:9, c:6},  {r:9, c:5},  {r:9, c:4},  {r:9, c:3},  {r:9, c:2},  {r:9, c:1},  
+    {r:8, c:1}   
 ];
 
-// 4 Distinct Home Run Stretch Paths (6 cells each) + 1 Home Triangle Destination
 const HOME_RUN_COORDS = {
-    red:    [{r:8, c:2}, {r:8, c:3}, {r:8, c:4}, {r:8, c:5}, {r:8, c:6}, {r:8, c:7}, {r:8, c:8}],
-    green:  [{r:2, c:8}, {r:3, c:8}, {r:4, c:8}, {r:5, c:8}, {r:6, c:8}, {r:7, c:8}, {r:8, c:8}],
-    yellow: [{r:8, c:14},{r:8, c:13},{r:8, c:12},{r:8, c:11},{r:8, c:10},{r:8, c:11},{r:8, c:8}],
-    blue:   [{r:14, c:8},{r:13, c:8},{r:12, c:8},{r:11, c:8},{r:10, c:8},{r:9, c:8}, {r:8, c:8}]
+    red:    [{r:8, c:2}, {r:8, c:3}, {r:8, c:4}, {r:8, c:5}, {r:8, c:6}, {r:8, c:7}],
+    green:  [{r:2, c:8}, {r:3, c:8}, {r:4, c:8}, {r:5, c:8}, {r:6, c:8}, {r:7, c:8}],
+    yellow: [{r:8, c:14},{r:8, c:13},{r:8, c:12},{r:8, c:11},{r:8, c:10},{r:8, c:9}],
+    blue:   [{r:14, c:8},{r:13, c:8},{r:12, c:8},{r:11, c:8},{r:10, c:8},{r:9, c:8}]
 };
 
-// Starting Yard Spawn coordinates
 const YARD_HOLE_COORDS = {
-    red:    [{r:3, c:3}, {r:3, c:5}, {r:5, c:3}, {r:5, c:5}],
-    green:  [{r:3, c:11}, {r:3, c:13}, {r:5, c:11}, {r:5, c:13}],
-    yellow: [{r:11, c:11}, {r:11, c:13}, {r:13, c:11}, {r:13, c:13}],
-    blue:   [{r:11, c:3}, {r:11, c:5}, {r:13, c:3}, {r:13, c:5}]
+    red:    [{r:3, c:3}, {r:3, c:4}, {r:4, c:3}, {r:4, c:4}],
+    green:  [{r:3, c:12}, {r:3, c:13}, {r:4, c:12}, {r:4, c:13}],
+    yellow: [{r:12, c:12}, {r:12, c:13}, {r:13, c:12}, {r:13, c:13}],
+    blue:   [{r:12, c:3}, {r:12, c:4}, {r:13, c:3}, {r:13, c:4}]
 };
 
-// Safe Zone indices on the common 52-cell track array (Star and starting spots)
-const SAFE_TRACK_INDICES = [0, 8, 13, 21, 26, 34, 39, 47];
-
-// Player spawn index mapping offsets
-const PLAYER_START_OFFSETS = { green: 0, yellow: 13, blue: 26, red: 39 };
+// --- FIX: Corrected absolute launch entry index offsets ---
+const START_OFFSETS = { green: 0, yellow: 13, blue: 26, red: 39 };
+const SAFE_INDICES = [0, 8, 13, 21, 26, 34, 39, 47];
 
 let gameState = {
     currentPlayer: 'red',
     lastRoll: 0,
+    hasRolled: false,
+    consecutiveSixes: 0, // Counter for the Three-Sixes Rule
     tokens: [],
     gameActive: true
 };
@@ -53,40 +52,40 @@ document.addEventListener('DOMContentLoaded', async () => {
     const { data: { session }, error } = await supabaseClient.auth.getSession();
     if (!session || error) { window.location.href = 'index.html'; return; }
 
-    document.getElementById('back-to-dashboard-btn').addEventListener('click', () => {
-        if(confirm("Exit match?")) window.location.href = 'dashboard.html';
-    });
-
     const board = document.getElementById('ludo-board');
     const diceBtn = document.getElementById('roll-dice-btn');
     const visualDice = document.getElementById('visual-dice');
     const logContainer = document.querySelector('.game-log');
+    const turnIndicator = document.getElementById('current-player-turn');
 
-    // --- 2. INITIALIZE AND SPAWN TOKENS ---
-    function spawnAllPlayerTokens() {
+    function initializeMatch() {
         board.querySelectorAll('.token-wrapper').forEach(t => t.remove());
         gameState.tokens = [];
+        gameState.currentPlayer = 'red';
+        gameState.lastRoll = 0;
+        gameState.hasRolled = false;
+        gameState.consecutiveSixes = 0;
+        gameState.gameActive = true;
+
         const colors = ['red', 'green', 'yellow', 'blue'];
-        
         colors.forEach(color => {
             for (let i = 0; i < 4; i++) {
-                const initialCoords = YARD_HOLE_COORDS[color][i];
-                const tokenObj = {
+                const homeYard = YARD_HOLE_COORDS[color][i];
+                const token = {
                     id: `${color}-${i}`,
                     color: color,
                     index: i,
-                    status: 'yard', // yard, track, homeRun, finished
+                    status: 'yard',
                     stepCount: 0,
-                    trackIndex: -1,
-                    coord: { r: initialCoords.r, c: initialCoords.c }
+                    trackIndex: -1
                 };
-                gameState.tokens.push(tokenObj);
+                gameState.tokens.push(token);
 
                 const wrapper = document.createElement('div');
                 wrapper.className = `token-wrapper token-${color}`;
-                wrapper.id = tokenObj.id;
-                wrapper.style.gridRowStart = tokenObj.coord.r;
-                wrapper.style.gridColumnStart = tokenObj.coord.c;
+                wrapper.id = token.id;
+                wrapper.style.gridRowStart = homeYard.r;
+                wrapper.style.gridColumnStart = homeYard.c;
 
                 const shadow = document.createElement('div');
                 shadow.className = 'token-ambient-shadow';
@@ -104,201 +103,275 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 wrapper.appendChild(shadow);
                 wrapper.appendChild(img);
-                wrapper.addEventListener('click', () => handleTokenMovement(tokenObj));
+                wrapper.addEventListener('click', () => processTokenInteraction(token));
                 board.appendChild(wrapper);
             }
         });
+
+        updateTurnHUD();
+        logMessage("🔴 Red starts! Roll the dice.");
     }
 
-    // --- 3. CORE LOGIC ENGINE (MOVEMENT, CAPTURES, HOME RUNS) ---
-    function handleTokenMovement(token) {
+    // ==========================================================================
+    // 2. CORE INTERACTION AND BLOCK / HIT REFEREE
+    // ==========================================================================
+    function processTokenInteraction(token) {
         if (!gameState.gameActive) return;
-        if (token.color !== gameState.currentPlayer) return logMessage(`It's not ${token.color}'s turn!`);
-        if (gameState.lastRoll === 0) return logMessage(`Roll the dice first!`);
-        
-        const el = document.getElementById(token.id);
+        if (token.color !== gameState.currentPlayer) {
+            return logMessage(`It is ${gameState.currentPlayer.toUpperCase()}'s turn!`);
+        }
+        if (!gameState.hasRolled) {
+            return logMessage(`Roll the dice first!`);
+        }
 
-        // A. Handle Launching From Yard Base
+        const el = document.getElementById(token.id);
+        const roll = gameState.lastRoll;
+
+        // Rule A: Leaving the Yard
         if (token.status === 'yard') {
-            if (gameState.lastRoll === 6) {
+            if (roll === 6) {
+                // Check if our own start cell is blocked by another of our tokens
+                const targetIndex = START_OFFSETS[token.color];
+                if (isCellBlockedByEnemy(targetIndex, token.color)) {
+                    return logMessage(`Movement blocked! An opponent block prevents your entry.`);
+                }
+
                 token.status = 'track';
                 token.stepCount = 0;
-                token.trackIndex = PLAYER_START_OFFSETS[token.color];
+                token.trackIndex = targetIndex; // Uses newly corrected launch mappings
                 
-                updateTokenPositionUI(el, COMMON_TRACK_COORDS[token.trackIndex]);
-                logMessage(`${token.color.toUpperCase()} token launched onto track!`);
-                checkCollisionsAndReferee(token);
+                repositionUI(el, COMMON_TRACK_COORDS[token.trackIndex]);
+                logMessage(`🚀 ${token.color.toUpperCase()} pawn deployed to its launchpad space!`);
+                evaluateCollisions(token);
+                completeTurnSequence(true); // 6 awards bonus roll
             } else {
-                logMessage(`Requires a 6 to launch from yard.`);
+                logMessage(`You must roll a 6 to bring a pawn out from the yard.`);
             }
             return;
         }
 
-        // B. Handle Moving on Main Common Track
+        // Rule B: Traversing the main track
         if (token.status === 'track') {
-            const remainingTrackSteps = 51 - token.stepCount;
-            
-            if (gameState.lastRoll <= remainingTrackSteps) {
-                // Token stays on main track
-                token.stepCount += gameState.lastRoll;
-                token.trackIndex = (token.trackIndex + gameState.lastRoll) % 52;
-                updateTokenPositionUI(el, COMMON_TRACK_COORDS[token.trackIndex]);
-                checkCollisionsAndReferee(token);
+            const potentialSteps = token.stepCount + roll;
+
+            // Check path for opponent "Blocks"
+            if (isPathBlockedByEnemy(token.trackIndex, roll, token.color)) {
+                return logMessage(`🚫 Blocked! You cannot pass through an opponent block.`);
+            }
+
+            if (potentialSteps <= 51) {
+                token.stepCount = potentialSteps;
+                token.trackIndex = (token.trackIndex + roll) % 52;
+                repositionUI(el, COMMON_TRACK_COORDS[token.trackIndex]);
+                evaluateCollisions(token);
+                completeTurnSequence(roll === 6);
             } else {
-                // Token steps into its color Home Run stretch
-                const stepsIntoHomeRun = gameState.lastRoll - remainingTrackSteps - 1;
-                if (stepsIntoHomeRun <= 6) {
-                    token.status = 'homeRun';
-                    token.stepCount += gameState.lastRoll;
-                    token.trackIndex = stepsIntoHomeRun;
-                    updateTokenPositionUI(el, HOME_RUN_COORDS[token.color][token.trackIndex]);
-                    checkHomeRunCompletion(token, el);
+                // Enter Home Column
+                const homeIndex = potentialSteps - 52;
+                if (homeIndex <= 5) {
+                    token.status = 'homerun';
+                    token.stepCount = potentialSteps;
+                    token.trackIndex = homeIndex;
+                    repositionUI(el, HOME_RUN_COORDS[token.color][token.trackIndex]);
+                    completeTurnSequence(roll === 6);
+                } else if (homeIndex === 6) {
+                    token.status = 'finished';
+                    el.style.opacity = '0.2';
+                    logMessage(`✨ Goal! ${token.color.toUpperCase()} made it to safety.`);
+                    checkWinConditions(token.color);
+                    completeTurnSequence(true);
                 } else {
-                    logMessage(`Roll too high to enter Home Run stretch.`);
+                    logMessage(`Roll too high to enter the home column.`);
                 }
             }
             return;
         }
 
-        // C. Handle Home Run Exact-Fit Steps
-        if (token.status === 'homeRun') {
-            const nextHomeRunIndex = token.trackIndex + gameState.lastRoll;
-            if (nextHomeRunIndex <= 6) { // 6 is exact fit index for the Home Triangle
-                token.trackIndex = nextHomeRunIndex;
-                token.stepCount += gameState.lastRoll;
-                updateTokenPositionUI(el, HOME_RUN_COORDS[token.color][token.trackIndex]);
-                checkHomeRunCompletion(token, el);
+        // Rule C: Home Run Path Exact fit
+        if (token.status === 'homerun') {
+            const targetHomeIndex = token.trackIndex + roll;
+            if (targetHomeIndex <= 5) {
+                token.trackIndex = targetHomeIndex;
+                token.stepCount += roll;
+                repositionUI(el, HOME_RUN_COORDS[token.color][token.trackIndex]);
+                completeTurnSequence(roll === 6);
+            } else if (targetHomeIndex === 6) {
+                token.status = 'finished';
+                el.style.opacity = '0.2';
+                logMessage(`✨ Goal! ${token.color.toUpperCase()} reached the final triangle.`);
+                checkWinConditions(token.color);
+                completeTurnSequence(true);
             } else {
-                logMessage(`Roll too high! Exact number required to reach Home Base.`);
+                logMessage(`Roll too high! Exact number needed to finish.`);
             }
         }
     }
 
-    // --- 4. COLLISION AND CAPTURE LOGIC MECHANICS ---
-    function checkCollisionsAndReferee(movedToken) {
-        // Find if any opponent token sits on the exact same common track square
-        const targetCollision = gameState.tokens.find(other => 
+    // ==========================================================================
+    // 3. BLOCKING AND CAPTURE VERIFICATIONS
+    // ==========================================================================
+    function isCellBlockedByEnemy(trackIndex, playerColor) {
+        // A block is formed when 2 or more tokens of the same enemy color occupy a cell
+        const matchingTokens = gameState.tokens.filter(t => t.status === 'track' && t.trackIndex === trackIndex);
+        if (matchingTokens.length >= 2 && matchingTokens[0].color !== playerColor) {
+            return true;
+        }
+        return false;
+    }
+
+    function isPathBlockedByEnemy(startIndex, steps, playerColor) {
+        for (let i = 1; i <= steps; i++) {
+            const checkIndex = (startIndex + i) % 52;
+            if (isCellBlockedByEnemy(checkIndex, playerColor)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function evaluateCollisions(movedToken) {
+        // Filter out tokens on the exact same common track cell
+        const occupants = gameState.tokens.filter(other => 
             other.id !== movedToken.id &&
             other.status === 'track' &&
             other.trackIndex === movedToken.trackIndex
         );
 
-        if (targetCollision) {
-            // Check if this square is an immune Safe Zone
-            if (SAFE_TRACK_INDICES.includes(movedToken.trackIndex)) {
-                logMessage(`Safe Zone cell! ${movedToken.color} shares square with ${targetCollision.color}.`);
-                resetTurn();
+        if (occupants.length > 0) {
+            // Safe Zones check
+            if (SAFE_INDICES.includes(movedToken.trackIndex)) {
+                logMessage(`Safe Zone cell. Multiple colors are resting here safely.`);
                 return;
             }
 
-            // Execute Capture: Return opponent back to base yard holes
-            if (targetCollision.color !== movedToken.color) {
-                logMessage(`💥 CAPTURE! ${movedToken.color.toUpperCase()} eliminated ${targetCollision.color.toUpperCase()}!`);
-                
-                targetCollision.status = 'yard';
-                targetCollision.stepCount = 0;
-                targetCollision.trackIndex = -1;
-                
-                const opponentElement = document.getElementById(targetCollision.id);
-                const originalHoleCoords = YARD_HOLE_COORDS[targetCollision.color][targetCollision.index];
-                updateTokenPositionUI(opponentElement, originalHoleCoords);
-                
-                // Rule Reward: Capturing grants an immediate bonus roll turn
-                gameState.lastRoll = 0;
-                diceBtn.disabled = false;
-                logMessage(`${movedToken.color.toUpperCase()} earns a bonus roll for the capture!`);
-                return;
+            const enemy = occupants.find(t => t.color !== movedToken.color);
+            if (enemy) {
+                logMessage(`💥 Cut! ${movedToken.color.toUpperCase()} captured ${enemy.color.toUpperCase()}'s token!`);
+                enemy.status = 'yard';
+                enemy.stepCount = 0;
+                enemy.trackIndex = -1;
+
+                const enemyEl = document.getElementById(enemy.id);
+                repositionUI(enemyEl, YARD_HOLE_COORDS[enemy.color][enemy.index]);
             }
         }
-        resetTurn();
     }
 
-    // --- 5. EXACT-FIT HOME RUN LOGIC & WINNER TRACKING ---
-    function checkHomeRunCompletion(token, element) {
-        if (token.trackIndex === 6) {
-            token.status = 'finished';
-            element.style.opacity = '0.35'; // Dim piece out when safely home
-            logMessage(`✨ GOAL! A ${token.color.toUpperCase()} token has reached the Home Base!`);
-
-            // Evaluate if all 4 tokens for this specific active player are finished
-            const allFinished = gameState.tokens
-                .filter(t => t.color === token.color)
-                .every(t => t.status === 'finished');
-
-            if (allFinished) {
-                gameState.gameActive = false;
-                diceBtn.disabled = true;
-                alert(`🏆 MATCH OVER! The ${token.color.toUpperCase()} Player wins!`);
-                logMessage(`🏆 MATCH OVER! ${token.color.toUpperCase()} WINS!`);
-                return;
-            }
+    function checkWinConditions(color) {
+        const hasWon = gameState.tokens.filter(t => t.color === color).every(t => t.status === 'finished');
+        if (hasWon) {
+            gameState.gameActive = false;
+            diceBtn.disabled = true;
+            alert(`🏆 The ${color.toUpperCase()} Player wins the game!`);
         }
-        resetTurn();
     }
 
-    function updateTokenPositionUI(element, coords) {
-        element.style.gridRowStart = coords.r;
-        element.style.gridColumnStart = coords.c;
-    }
-
-    function resetTurn() {
+    function completeTurnSequence(earnedBonus = false) {
+        gameState.hasRolled = false;
         gameState.lastRoll = 0;
-        diceBtn.disabled = false;
-        
+
+        if (earnedBonus && gameState.gameActive) {
+            diceBtn.disabled = false;
+            updateTurnHUD();
+            logMessage(`🎲 Bonus Roll! ${gameState.currentPlayer.toUpperCase()} gets another go.`);
+            return;
+        }
+
+        // Reset the 6s tracker on regular handoffs
+        gameState.consecutiveSixes = 0;
+
         const order = ['red', 'green', 'yellow', 'blue'];
         let nextIdx = (order.indexOf(gameState.currentPlayer) + 1) % 4;
         gameState.currentPlayer = order[nextIdx];
-        
-        const turnIndicator = document.getElementById('current-player-turn');
-        turnIndicator.className = `turn-${gameState.currentPlayer}`;
-        turnIndicator.textContent = `${gameState.currentPlayer.toUpperCase()} Player`;
+
+        diceBtn.disabled = false;
+        updateTurnHUD();
     }
 
-    function logMessage(text) {
+    function updateTurnHUD() {
+        let text = `${gameState.currentPlayer.toUpperCase()}'s Turn — `;
+        if (!gameState.hasRolled) {
+            text += "Roll Dice";
+        } else {
+            text += `Select Piece to move (${gameState.lastRoll})`;
+        }
+        turnIndicator.textContent = text;
+        turnIndicator.className = `turn-${gameState.currentPlayer}`;
+    }
+
+    function repositionUI(element, points) {
+        element.style.gridRowStart = points.r;
+        element.style.gridColumnStart = points.c;
+    }
+
+    function logMessage(msg) {
         const p = document.createElement('p');
         p.className = 'log-entry';
-        p.textContent = text;
+        p.textContent = msg;
         logContainer.appendChild(p);
         logContainer.scrollTop = logContainer.scrollHeight;
     }
 
-    // --- 6. DICE ROLLING TRIGGER ENGINE ---
+    // ==========================================================================
+    // 4. DICE CONTROLLER ENGINE (WITH 3-SIXES EXCEPTION FOUL)
+    // ==========================================================================
     const diceFaces = { 1: '⚀', 2: '⚁', 3: '⚂', 4: '⚃', 5: '⚄', 6: '⚅' };
 
     diceBtn.addEventListener('click', () => {
-        if (!gameState.gameActive) return;
+        if (!gameState.gameActive || gameState.hasRolled) return;
         diceBtn.disabled = true;
-        let counter = 0;
-        
-        const rollInterval = setInterval(() => {
-            const randomTmp = Math.floor(Math.random() * 6) + 1;
-            visualDice.textContent = diceFaces[randomTmp];
-            counter++;
-            
-            if (counter > 8) {
-                clearInterval(rollInterval);
+        let ticks = 0;
+
+        const shuffle = setInterval(() => {
+            const temp = Math.floor(Math.random() * 6) + 1;
+            visualDice.textContent = diceFaces[temp];
+            ticks++;
+
+            if (ticks > 8) {
+                clearInterval(shuffle);
                 const finalRoll = Math.floor(Math.random() * 6) + 1;
                 visualDice.textContent = diceFaces[finalRoll];
-                
+
                 gameState.lastRoll = finalRoll;
-                logMessage(`${gameState.currentPlayer.toUpperCase()} rolled a ${finalRoll}!`);
-                
-                // Auto-pass evaluation step logic rules
-                const activePlayerTokens = gameState.tokens.filter(t => t.color === gameState.currentPlayer);
-                const hasValidMove = activePlayerTokens.some(t => {
-                    if (t.status === 'yard' && finalRoll === 6) return true;
-                    if (t.status === 'track') return true; // Can always move forward or enter run stretch
-                    if (t.status === 'homeRun' && (t.trackIndex + finalRoll <= 6)) return true;
+                gameState.hasRolled = true;
+                logMessage(`${gameState.currentPlayer.toUpperCase()} rolled a ${finalRoll}.`);
+
+                // Evaluate Three-Sixes Rule Exception Foul
+                if (finalRoll === 6) {
+                    gameState.consecutiveSixes++;
+                    if (gameState.consecutiveSixes === 3) {
+                        logMessage(`⚠️ FOUL! 3 consecutive 6s rolled. Turn forfeited immediately!`);
+                        setTimeout(() => completeTurnSequence(false), 1500);
+                        return;
+                    }
+                } else {
+                    gameState.consecutiveSixes = 0;
+                }
+
+                // Auto-Pass Assessment
+                const team = gameState.tokens.filter(t => t.color === gameState.currentPlayer);
+                const canMove = team.some(p => {
+                    if (p.status === 'yard' && finalRoll === 6) {
+                        return !isCellBlockedByEnemy(START_OFFSETS[p.color], p.color);
+                    }
+                    if (p.status === 'track') {
+                        return !isPathBlockedByEnemy(p.trackIndex, finalRoll, p.color);
+                    }
+                    if (p.status === 'homerun') {
+                        return p.trackIndex + finalRoll <= 6;
+                    }
                     return false;
                 });
 
-                if (!hasValidMove) {
-                    logMessage(`No valid moves available! Passing turn...`);
-                    setTimeout(resetTurn, 1400);
+                if (!canMove) {
+                    logMessage("No legal moves possible with this roll. Skipping turn...");
+                    setTimeout(() => completeTurnSequence(false), 1500);
+                } else {
+                    updateTurnHUD();
                 }
             }
-        }, 80);
+        }, 70);
     });
 
-    spawnAllPlayerTokens();
+    initializeMatch();
 });
