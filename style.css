@@ -1,7 +1,7 @@
 /* --- LOGIN SCREEN STYLES --- */
 body {
     font-family: Arial, sans-serif;
-    background-color: #1e1e2f; /* Dark game-like background */
+    background-color: #1e1e2f;
     color: white;
     display: flex;
     justify-content: center;
@@ -31,7 +31,7 @@ input {
 button {
     width: 100%;
     padding: 10px;
-    background-color: #ff4757; /* A fun Ludo red */
+    background-color: #ff4757;
     color: white;
     border: none;
     border-radius: 5px;
@@ -50,7 +50,7 @@ button:hover {
 }
 
 a {
-    color: #1e90ff; /* Blue text for links */
+    color: #1e90ff;
     text-decoration: none;
 }
 
@@ -73,7 +73,6 @@ a {
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
 
-/* Header Area */
 .user-header {
     display: flex;
     justify-content: space-between;
@@ -107,7 +106,6 @@ a {
     color: #2ed573;
 }
 
-/* Wallet style */
 .wallet-card {
     text-align: right;
     background: linear-gradient(135deg, #2ed573, #26af5f);
@@ -127,7 +125,6 @@ a {
     font-size: 1.4rem;
 }
 
-/* Tab Navigation System */
 .dashboard-tabs {
     display: flex;
     background: #232338;
@@ -146,11 +143,10 @@ a {
     transition: all 0.2s ease;
     border-radius: 8px;
     text-align: center;
-    -webkit-tap-highlight-color: transparent; /* Smooth touch response mobile */
 }
 
 .tab-btn:active {
-    transform: scale(0.97); /* Haptic press style simulation */
+    transform: scale(0.97);
 }
 
 .tab-btn.active {
@@ -163,7 +159,6 @@ a {
     flex: 0.5;
 }
 
-/* Main Display Switchers */
 .dashboard-content {
     flex: 1;
     padding: 20px;
@@ -178,7 +173,6 @@ a {
     display: block;
 }
 
-/* Rooms/Lobby Layout */
 .lobby-header {
     display: flex;
     justify-content: space-between;
@@ -217,7 +211,6 @@ a {
     font-weight: bold;
 }
 
-/* Action Buttons */
 .join-btn, .action-btn {
     background: #ffa502;
     color: #1e1e2f;
@@ -275,7 +268,6 @@ a {
 
 .turn-red { color: #ff4757; }
 
-/* Main Arena splits Board vs Sidebar Controls */
 .game-arena {
     flex: 1;
     display: flex;
@@ -286,7 +278,7 @@ a {
     overflow: hidden;
 }
 
-/* Perfect responsive square wrapper mapping your premium graphic asset */
+/* 15x15 Responsive Grid Canvas overlaying your game asset background */
 .ludo-board-wrapper {
     height: 90vh;
     max-height: 90vw;
@@ -298,7 +290,31 @@ a {
     position: relative;
     border-radius: 8px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    grid-template-rows: repeat(15, 1fr);
 }
+
+/* Token asset sizing and layout rule sets */
+.token {
+    width: 84%;
+    height: 84%;
+    margin: 8%;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    z-index: 10;
+    align-self: center;
+    justify-self: center;
+}
+
+/* Accent borders to make individual pieces pop */
+.token-red { border-color: #ff4757; }
+.token-green { border-color: #2ed573; }
+.token-blue { border-color: #1e90ff; }
+.token-yellow { border-color: #ffa502; }
 
 .game-controls-sidebar {
     width: 260px;
@@ -315,33 +331,16 @@ a {
     border-radius: 12px;
     text-align: center;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
-/* New responsive styling rules for premium dice graphics */
-.dice-image {
-    width: 140px;
-    height: 140px;
-    object-fit: contain;
+/* Classic clean Unicode text dice layout styling rules */
+.dice-face {
+    font-size: 5.5rem;
+    line-height: 1;
     margin-bottom: 15px;
-    border-radius: 14px;
+    color: #ffa502;
     user-select: none;
-    -webkit-user-drag: none;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    transition: transform 0.1s ease;
-}
-
-/* CSS dynamic blur/spin animation triggered when dice is rolled */
-.rolling-animation {
-    animation: spinAndBlur 0.15s infinite linear;
-}
-
-@keyframes spinAndBlur {
-    0% { transform: scale(0.95) rotate(0deg); filter: brightness(1.2); }
-    50% { transform: scale(1.05) rotate(180deg); }
-    100% { transform: scale(0.95) rotate(360deg); filter: brightness(1.2); }
+    text-shadow: 0 0 15px rgba(255, 165, 2, 0.4);
 }
 
 .roll-btn {
@@ -368,7 +367,7 @@ a {
     padding-bottom: 4px;
 }
 
-/* Desktop and Mobile Responsiveness Scaling Rules */
+/* Responsiveness Rules */
 @media (max-width: 850px) {
     .game-arena {
         flex-direction: column;
@@ -381,26 +380,5 @@ a {
     .game-controls-sidebar {
         width: 100%;
         max-height: none;
-    }
-    .dice-image {
-        width: 110px;
-        height: 110px;
-    }
-}
-
-@media (max-width: 600px) {
-    .dashboard-container {
-        height: 100vh;
-        border-radius: 0;
-    }
-    .user-header {
-        padding: 15px;
-    }
-    .avatar {
-        width: 45px;
-        height: 45px;
-    }
-    .wallet-card {
-        padding: 8px 14px;
     }
 }
