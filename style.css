@@ -1,0 +1,60 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1e1e2f; /* Dark game-like background */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.auth-container {
+    background: #2a2a40;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    text-align: center;
+    width: 300px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #ff4757; /* A fun Ludo red */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #ff6b81;
+}
+
+.toggle-text {
+    margin-top: 15px;
+    font-size: 0.9em;
+}
+
+a {
+    color: #1e90ff; /* Blue text for links */
+    text-decoration: none;
+}
+
+.error-text {
+    color: #ff4757;
+    font-size: 0.85em;
+    min-height: 20px;
+}

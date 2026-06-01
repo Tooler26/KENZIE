@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ludo Web - Login</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Load Supabase Library directly -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <div class="auth-container">
+        <h1 id="auth-title">Welcome to Ludo</h1>
+        
+        <form id="auth-form">
+            <input type="email" id="email" placeholder="Email Address" required>
+            <input type="password" id="password" placeholder="Password" required>
+            
+            <button type="submit" id="submit-btn">Login</button>
+        </form>
+
+        <p id="error-message" class="error-text"></p>
+
+        <div class="toggle-text">
+            <span id="toggle-hint">New player?</span> 
+            <a href="#" id="toggle-mode">Sign up here</a>
+        </div>
+    </div>
+
+    <!-- Load our logic -->
+    <script src="auth.js"></script>
+</body>
+</html>
