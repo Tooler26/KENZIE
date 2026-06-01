@@ -217,7 +217,7 @@ a {
     font-weight: bold;
 }
 
-/* Action Buttons (Large Touch Area) */
+/* Action Buttons */
 .join-btn, .action-btn {
     background: #ffa502;
     color: #1e1e2f;
@@ -226,7 +226,7 @@ a {
     border-radius: 8px;
     font-weight: bold;
     cursor: pointer;
-    min-height: 44px; /* Universal Mobile Touch target standard */
+    min-height: 44px;
 }
 
 .join-btn:hover, .action-btn:hover {
@@ -241,7 +241,129 @@ a {
     text-align: left;
 }
 
-/* Mobile responsive adjustments */
+/* --- LIVE GAME SCREEN STYLES (New Updates) --- */
+.game-screen-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #13131a;
+}
+
+.game-hud {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: #1e1e2f;
+    border-bottom: 3px solid #ff4757;
+}
+
+.hud-back-btn {
+    background: #3d3d5c;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.turn-indicator {
+    font-size: 1.1rem;
+}
+
+.turn-red { color: #ff4757; }
+
+/* Main Arena splits Board vs Sidebar Controls */
+.game-arena {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    gap: 20px;
+    overflow: hidden;
+}
+
+/* Perfect responsive square wrapper mapping your premium graphic asset */
+.ludo-board-wrapper {
+    height: 90vh;
+    max-height: 90vw;
+    aspect-ratio: 1 / 1;
+    background-image: url('board.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+.game-controls-sidebar {
+    width: 260px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    height: 100%;
+    max-height: 600px;
+}
+
+.dice-box {
+    background: #2a2a40;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.dice-face {
+    font-size: 5rem;
+    margin-bottom: 10px;
+    color: #ffa502;
+    user-select: none;
+}
+
+.roll-btn {
+    width: 100%;
+    background: #ff4757;
+    color: white;
+}
+
+.game-log {
+    flex: 1;
+    background: #1e1e2f;
+    border-radius: 12px;
+    padding: 15px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 0.85rem;
+    border: 1px solid #3d3d5c;
+    color: #a0a0b8;
+}
+
+.log-entry {
+    margin: 5px 0;
+    border-bottom: 1px solid #232338;
+    padding-bottom: 4px;
+}
+
+/* Desktop and Mobile Responsiveness Scaling Rules */
+@media (max-width: 850px) {
+    .game-arena {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+    .ludo-board-wrapper {
+        width: 95vw;
+        height: 95vw;
+    }
+    .game-controls-sidebar {
+        width: 100%;
+        max-height: none;
+    }
+}
+
 @media (max-width: 600px) {
     .dashboard-container {
         height: 100vh;

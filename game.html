@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ludo Match - Live</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <div class="game-screen-container">
+        <header class="game-hud">
+            <button id="back-to-dashboard-btn" class="hud-back-btn">Exit Match</button>
+            <div class="turn-indicator">
+                <span>Current Turn: </span>
+                <strong id="current-player-turn" class="turn-red">Red Player</strong>
+            </div>
+        </header>
+
+        <main class="game-arena">
+            <div class="ludo-board-wrapper" id="ludo-board">
+                </div>
+
+            <div class="game-controls-sidebar">
+                <div class="dice-box">
+                    <div id="visual-dice" class="dice-face">⚀</div>
+                    <button id="roll-dice-btn" class="action-btn roll-btn">Roll Dice</button>
+                </div>
+                <div class="game-log">
+                    <p class="log-entry">Welcome to the Match! Waiting for turns...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
