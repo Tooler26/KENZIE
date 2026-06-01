@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Current mode tracker: true = login, false = signup
     let isLoginMode = true;
 
-    // 3. Toggle between Login and Sign Up UI (This is the button fix!)
+    // 3. Toggle between Login and Sign Up UI
     if (toggleModeLink) {
         toggleModeLink.addEventListener('click', (e) => {
             e.preventDefault();
@@ -78,7 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (error) {
                     errorMessage.textContent = error.message;
                 } else {
-                    alert(`Welcome back, ${data.user.email}! Loading Ludo board...`);
+                    // Save token data and redirect to dashboard
+                    window.location.href = 'dashboard.html';
                 }
             } else {
                 // --- SIGN UP LOGIC ---
@@ -91,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     errorMessage.textContent = error.message;
                 } else {
                     alert("Sign up successful! Check your email for a confirmation link.");
+                    window.location.href = 'dashboard.html';
                 }
             }
         });

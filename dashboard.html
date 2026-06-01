@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ludo Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <header class="user-header">
+            <div class="user-profile">
+                <img id="user-avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=LudoPlayer" alt="Avatar" class="avatar">
+                <div class="user-info">
+                    <h3 id="user-name">Loading...</h3>
+                    <span class="status-badge">Online</span>
+                </div>
+            </div>
+            
+            <div class="wallet-card">
+                <span class="wallet-label">Wallet Balance</span>
+                <h2 id="wallet-balance">$0.00</h2>
+            </div>
+        </header>
+
+        <main class="dashboard-content">
+            
+            <nav class="dashboard-tabs">
+                <button class="tab-btn active" data-tab="lobby">Game Lobby</button>
+                <button class="tab-btn" data-tab="settings">Account Settings</button>
+                <button id="logout-btn" class="tab-btn logout">Logout</button>
+            </nav>
+
+            <section id="lobby-view" class="tab-view active">
+                <div class="lobby-header">
+                    <h2>Available Rooms</h2>
+                    <button class="action-btn create-room-btn">＋ Create Room</button>
+                </div>
+
+                <div class="rooms-grid">
+                    <div class="room-card">
+                        <div class="room-details">
+                            <h4>Classic Ludo #104</h4>
+                            <p>Players: <span class="player-count">2/4</span></p>
+                            <p>Entry Fee: <span class="fee-text">$2.00</span></p>
+                        </div>
+                        <button class="join-btn">Join Match</button>
+                    </div>
+
+                    <div class="room-card">
+                        <div class="room-details">
+                            <h4>Quick Match #209</h4>
+                            <p>Players: <span class="player-count">1/2</span></p>
+                            <p>Entry Fee: <span class="fee-text">Free</span></p>
+                        </div>
+                        <button class="join-btn">Join Match</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="settings-view" class="tab-view">
+                <h2>Account Settings</h2>
+                <div class="settings-form">
+                    <div class="input-group">
+                        <label for="update-username">Change Username</label>
+                        <input type="text" id="update-username" placeholder="Enter new username">
+                    </div>
+                    <button class="action-btn save-settings-btn">Save Changes</button>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
