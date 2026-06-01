@@ -4,7 +4,7 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ==========================================================================
-// 1. MASTER TRACK MATRIX GRID CONFIGURATIONS
+// 1. GRID DEFINITIONS & MAP COORDINATES
 // ==========================================================================
 const COMMON_TRACK_COORDS = [
     {r:7, c:1},  {r:7, c:2},  {r:7, c:3},  {r:7, c:4},  {r:7, c:5},  {r:7, c:6},  
@@ -35,7 +35,6 @@ const YARD_HOLE_COORDS = {
     blue:   [{r:12, c:3}, {r:12, c:4}, {r:13, c:3}, {r:13, c:4}]
 };
 
-// --- REMAPPED OFFSETS FOR PROPER BOARD ALIGNMENT ---
 const START_OFFSETS = { green: 26, yellow: 39, blue: 0, red: 13 };
 const SAFE_INDICES = [0, 8, 13, 21, 26, 34, 39, 47];
 
@@ -48,15 +47,45 @@ let gameState = {
     gameActive: true
 };
 
+// Network Identity Cache Containers
+let localUser = { id: "", username: "Guest Player" };
+let activeRoomId = "global-match-lounge"; // Default fall-back cloud sync table channel
+
 document.addEventListener('DOMContentLoaded', async () => {
+    // Check local authentication state
     const { data: { session }, error } = await supabaseClient.auth.getSession();
     if (!session || error) { window.location.href = 'index.html'; return; }
+
+    localUser.id = session.user.id;
+
+    // --- INTERNET ACCESS: Fetch True Username Profile Data ---
+    try {
+        const { data: profile, error: profileErr } = await supabaseClient
+            .from('profiles')
+            .select('username')
+            .eq('id', localUser.id)
+            .single();
+
+        if (profile && !profileErr) {
+            localUser.username = profile.username;
+        }
+    } catch (e) {
+        console.warn("Could not retrieve online user info, using guest mode profile fallback.", e);
+    }
 
     const board = document.getElementById('ludo-board');
     const diceBtn = document.getElementById('roll-dice-btn');
     const visualDice = document.getElementById('visual-dice');
     const logContainer = document.querySelector('.game-log');
     const turnIndicator = document.getElementById('current-player-turn');
+
+    // --- INTERNET ACCESS: Connect To Live Database Multiplayer Subscription ---
+    const roomSubscription = supabaseClient
+        .channel(`room:${activeRoomId}`)
+        .on('broadcast', { event: 'player-moved' }, ({ payload }) => {
+            syncStateFromCloud(payload);
+        })
+        .subscribe();
 
     function initializeMatch() {
         board.querySelectorAll('.token-wrapper').forEach(t => t.remove());
@@ -109,16 +138,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         updateTurnHUD();
-        logMessage("🔴 Red starts! Roll the dice.");
+        logMessage(`🌐 Connected Online as ${localUser.username}! Match Started.`);
     }
 
     function processTokenInteraction(token) {
         if (!gameState.gameActive) return;
         if (token.color !== gameState.currentPlayer) {
-            return logMessage(`It is ${gameState.currentPlayer.toUpperCase()}'s turn!`);
+            return logMessage(`It is not your turn yet!`);
         }
         if (!gameState.hasRolled) {
-            return logMessage(`Roll the dice first!`);
+            return logMessage(`Roll the dice first.`);
         }
 
         const el = document.getElementById(token.id);
@@ -128,7 +157,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (roll === 6) {
                 const targetIndex = START_OFFSETS[token.color];
                 if (isCellBlockedByEnemy(targetIndex, token.color)) {
-                    return logMessage(`Movement blocked by an opponent tower blockade!`);
+                    return logMessage(`Entry blocked by opponent wall!`);
                 }
 
                 token.status = 'track';
@@ -136,11 +165,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 token.trackIndex = targetIndex;
                 
                 repositionUI(el, COMMON_TRACK_COORDS[token.trackIndex]);
-                logMessage(`🚀 ${token.color.toUpperCase()} pawn successfully entered the board!`);
+                logMessage(`🚀 Deployed onto the board track.`);
                 evaluateCollisions(token);
                 completeTurnSequence(true); 
             } else {
-                logMessage(`You must roll a 6 to bring a pawn out from the yard.`);
+                logMessage(`Requires a 6 to venture out of the yard base.`);
             }
             return;
         }
@@ -149,7 +178,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const potentialSteps = token.stepCount + roll;
 
             if (isPathBlockedByEnemy(token.trackIndex, roll, token.color)) {
-                return logMessage(`🚫 Blocked! You cannot pass through an opponent blockade.`);
+                return logMessage(`🚫 Movement paths are blocked by an enemy team bridge wall!`);
             }
 
             if (potentialSteps <= 51) {
@@ -169,11 +198,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 } else if (homeIndex === 6) {
                     token.status = 'finished';
                     el.style.opacity = '0.2';
-                    logMessage(`✨ Goal! ${token.color.toUpperCase()} made it to safety.`);
+                    logMessage(`✨ Reached Goal Home Triangle!`);
                     checkWinConditions(token.color);
                     completeTurnSequence(true);
                 } else {
-                    logMessage(`Roll too high to enter the home column.`);
+                    logMessage(`Roll too high to fit into the column runway.`);
                 }
             }
             return;
@@ -189,55 +218,44 @@ document.addEventListener('DOMContentLoaded', async () => {
             } else if (targetHomeIndex === 6) {
                 token.status = 'finished';
                 el.style.opacity = '0.2';
-                logMessage(`✨ Goal! ${token.color.toUpperCase()} reached the final triangle.`);
+                logMessage(`✨ Finished!`);
                 checkWinConditions(token.color);
                 completeTurnSequence(true);
             } else {
-                logMessage(`Roll too high! Exact number needed to finish.`);
+                logMessage(`Roll too high! Exact number required.`);
             }
         }
     }
 
     function isCellBlockedByEnemy(trackIndex, playerColor) {
         const matchingTokens = gameState.tokens.filter(t => t.status === 'track' && t.trackIndex === trackIndex);
-        if (matchingTokens.length >= 2 && matchingTokens[0].color !== playerColor) {
-            return true;
-        }
-        return false;
+        return (matchingTokens.length >= 2 && matchingTokens[0].color !== playerColor);
     }
 
+    // Path verification logic loops
     function isPathBlockedByEnemy(startIndex, steps, playerColor) {
         for (let i = 1; i <= steps; i++) {
             const checkIndex = (startIndex + i) % 52;
-            if (isCellBlockedByEnemy(checkIndex, playerColor)) {
-                return true;
-            }
+            if (isCellBlockedByEnemy(checkIndex, playerColor)) return true;
         }
         return false;
     }
 
     function evaluateCollisions(movedToken) {
         const occupants = gameState.tokens.filter(other => 
-            other.id !== movedToken.id &&
-            other.status === 'track' &&
-            other.trackIndex === movedToken.trackIndex
+            other.id !== movedToken.id && other.status === 'track' && other.trackIndex === movedToken.trackIndex
         );
 
         if (occupants.length > 0) {
-            if (SAFE_INDICES.includes(movedToken.trackIndex)) {
-                logMessage(`Safe Zone cell. Standing together peacefully.`);
-                return;
-            }
+            if (SAFE_INDICES.includes(movedToken.trackIndex)) return;
 
             const enemy = occupants.find(t => t.color !== movedToken.color);
             if (enemy) {
-                logMessage(`💥 Cut! ${movedToken.color.toUpperCase()} captured ${enemy.color.toUpperCase()}'s token!`);
+                logMessage(`💥 captured ${enemy.color.toUpperCase()}'s piece! Sent to yard.`);
                 enemy.status = 'yard';
                 enemy.stepCount = 0;
                 enemy.trackIndex = -1;
-
-                const enemyEl = document.getElementById(enemy.id);
-                repositionUI(enemyEl, YARD_HOLE_COORDS[enemy.color][enemy.index]);
+                repositionUI(document.getElementById(enemy.id), YARD_HOLE_COORDS[enemy.color][enemy.index]);
             }
         }
     }
@@ -246,8 +264,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const hasWon = gameState.tokens.filter(t => t.color === color).every(t => t.status === 'finished');
         if (hasWon) {
             gameState.gameActive = false;
-            diceBtn.disabled = true;
-            alert(`🏆 The ${color.toUpperCase()} Player wins the game!`);
+            alert(`🏆 Match Finished! Victory to player ${color.toUpperCase()}!`);
         }
     }
 
@@ -255,32 +272,58 @@ document.addEventListener('DOMContentLoaded', async () => {
         gameState.hasRolled = false;
         gameState.lastRoll = 0;
 
-        if (earnedBonus && gameState.gameActive) {
-            diceBtn.disabled = false;
-            updateTurnHUD();
-            logMessage(`🎲 Bonus Roll! ${gameState.currentPlayer.toUpperCase()} gets another go.`);
-            return;
+        if (!earnedBonus) {
+            gameState.consecutiveSixes = 0;
+            const order = ['red', 'green', 'yellow', 'blue'];
+            let nextIdx = (order.indexOf(gameState.currentPlayer) + 1) % 4;
+            gameState.currentPlayer = order[nextIdx];
         }
 
-        gameState.consecutiveSixes = 0;
-
-        const order = ['red', 'green', 'yellow', 'blue'];
-        let nextIdx = (order.indexOf(gameState.currentPlayer) + 1) % 4;
-        gameState.currentPlayer = order[nextIdx];
+        // --- INTERNET ACCESS: Broadcast our movement across the web to other players ---
+        roomSubscription.send({
+            type: 'broadcast',
+            event: 'player-moved',
+            payload: { gameState, senderName: localUser.username }
+        });
 
         diceBtn.disabled = false;
         updateTurnHUD();
     }
 
+    // --- SHOWING USERNAME AND TURN HUD TRACKER ---
     function updateTurnHUD() {
-        let text = `${gameState.currentPlayer.toUpperCase()}'s Turn — `;
-        if (!gameState.hasRolled) {
-            text += "Roll Dice";
+        const activeColor = gameState.currentPlayer.toUpperCase();
+        
+        // Displays both the color assignment role and the logged-in Supabase username profile
+        if (gameState.currentPlayer === 'red') {
+            turnIndicator.textContent = `🎲 Turn: [${localUser.username}] (${activeColor})`;
         } else {
-            text += `Select Piece to move (${gameState.lastRoll})`;
+            turnIndicator.textContent = `🎲 Turn: [Opponent] (${activeColor})`;
         }
-        turnIndicator.textContent = text;
-        turnIndicator.className = `turn-${gameState.currentPlayer}`;
+
+        turnIndicator.className = `turn-indicator turn-${gameState.currentPlayer}`;
+    }
+
+    function syncStateFromCloud(cloudState) {
+        gameState = cloudState.gameState;
+        
+        // Synchronize and slide visual positions of remote tokens across screens
+        gameState.tokens.forEach(token => {
+            const el = document.getElementById(token.id);
+            if (!el) return;
+            
+            if (token.status === 'yard') {
+                repositionUI(el, YARD_HOLE_COORDS[token.color][token.index]);
+            } else if (token.status === 'track') {
+                repositionUI(el, COMMON_TRACK_COORDS[token.trackIndex]);
+            } else if (token.status === 'homerun') {
+                repositionUI(el, HOME_RUN_COORDS[token.color][token.trackIndex]);
+            } else if (token.status === 'finished') {
+                el.style.opacity = '0.2';
+            }
+        });
+        
+        updateTurnHUD();
     }
 
     function repositionUI(element, points) {
@@ -315,12 +358,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 gameState.lastRoll = finalRoll;
                 gameState.hasRolled = true;
-                logMessage(`${gameState.currentPlayer.toUpperCase()} rolled a ${finalRoll}.`);
+                logMessage(`Rolled a ${finalRoll}.`);
 
                 if (finalRoll === 6) {
                     gameState.consecutiveSixes++;
                     if (gameState.consecutiveSixes === 3) {
-                        logMessage(`⚠️ FOUL! 3 consecutive 6s rolled. Turn forfeited immediately!`);
+                        logMessage(`⚠️ FOUL! 3 consecutive 6s!`);
                         setTimeout(() => completeTurnSequence(false), 1500);
                         return;
                     }
@@ -343,7 +386,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
 
                 if (!canMove) {
-                    logMessage("No legal moves possible with this roll. Skipping turn...");
+                    logMessage("No moves open! Passing turn...");
                     setTimeout(() => completeTurnSequence(false), 1500);
                 } else {
                     updateTurnHUD();

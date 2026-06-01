@@ -1,6 +1,12 @@
 /* ==========================================================================
-   1. GLOBAL THEME & AUTHENTICATION LAYOUT
+   1. GLOBAL THEME, CSS RESET & AUTHENTICATION
    ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #1e1e2f;
@@ -8,8 +14,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
+    min-height: 100vh;
 }
 
 .auth-container {
@@ -18,7 +23,8 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     text-align: center;
-    width: 300px;
+    width: 90%;
+    max-width: 320px;
 }
 
 input {
@@ -27,7 +33,8 @@ input {
     margin: 10px 0;
     border: none;
     border-radius: 5px;
-    box-sizing: border-box;
+    background-color: #13131a;
+    color: white;
 }
 
 button {
@@ -63,7 +70,7 @@ a {
 }
 
 /* ==========================================================================
-   2. DASHBOARD HUB & MANAGEMENT STYLES
+   2. DASHBOARD HUB & ROOM MANAGEMENT
    ========================================================================== */
 .dashboard-container {
     width: 100%;
@@ -75,6 +82,7 @@ a {
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    margin: 10px;
 }
 
 .user-header {
@@ -170,13 +178,6 @@ a {
     display: block; 
 }
 
-.lobby-header { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    margin-bottom: 20px; 
-}
-
 .rooms-grid { 
     display: grid; 
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
@@ -193,45 +194,8 @@ a {
     border-left: 5px solid #ffa502; 
 }
 
-.room-details h4 { 
-    margin: 0 0 5px 0; 
-}
-
-.room-details p { 
-    margin: 2px 0; 
-    font-size: 0.9rem; 
-    color: #a0a0b8; 
-}
-
-.fee-text { 
-    color: #2ed573; 
-    font-weight: bold; 
-}
-
-.join-btn, .action-btn { 
-    background: #ffa502; 
-    color: #1e1e2f; 
-    border: none; 
-    padding: 12px 20px; 
-    border-radius: 8px; 
-    font-weight: bold; 
-    cursor: pointer; 
-}
-
-.join-btn:hover, .action-btn:hover { 
-    filter: brightness(1.1); 
-}
-
-.input-group { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 8px; 
-    margin-bottom: 15px; 
-    text-align: left; 
-}
-
 /* ==========================================================================
-   3. LIVE MATCH LAYOUT & INTERACTIVE MATRIX GRID
+   3. LIVE MATCH MOBILE-FIRST VIEWPORT RESPONSIVENESS
    ========================================================================== */
 .game-screen-container {
     width: 100vw;
@@ -239,51 +203,61 @@ a {
     display: flex;
     flex-direction: column;
     background-color: #13131a;
+    overflow: hidden;
 }
 
 .game-hud {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
+    padding: 12px 16px;
     background: #1e1e2f;
     border-bottom: 3px solid #ff4757;
+    z-index: 100;
 }
 
 .hud-back-btn { 
     background: #3d3d5c; 
     color: white; 
     border: none; 
-    padding: 8px 16px; 
+    padding: 6px 12px; 
     border-radius: 5px; 
     cursor: pointer; 
     font-weight: bold; 
+    font-size: 0.85rem;
 }
 
 .turn-indicator { 
-    font-size: 1.1rem; 
+    font-size: 0.95rem; 
+    font-weight: bold;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    padding: 4px 8px;
+    border-radius: 4px;
 }
 
-/* Turn Tracker Colors */
-.turn-red { color: #ff4757; }
-.turn-green { color: #2ed573; }
-.turn-yellow { color: #ffa502; }
-.turn-blue { color: #1e90ff; }
+/* Real-Time Turn Class Dynamic Colors */
+.turn-red { color: #ff4757; border-left: 3px solid #ff4757; }
+.turn-green { color: #2ed573; border-left: 3px solid #2ed573; }
+.turn-yellow { color: #ffa502; border-left: 3px solid #ffa502; }
+.turn-blue { color: #1e90ff; border-left: 3px solid #1e90ff; }
 
 .game-arena {
     flex: 1;
     display: flex;
-    justify-content: center;
+    flex-direction: column; /* Stack layout vertically on default mobile devices */
+    justify-content: space-around;
     align-items: center;
-    padding: 20px;
-    gap: 20px;
-    overflow: hidden;
+    padding: 10px;
+    gap: 10px;
+    overflow-y: auto;
 }
 
-/* The 15x15 Precise Grid Overlay Map */
+/* The 15x15 Precise Grid Map Container Box */
 .ludo-board-wrapper {
-    height: 90vh;
-    max-height: 90vw;
+    width: 92vw;
+    height: 92vw;
+    max-width: 440px;
+    max-height: 440px;
     aspect-ratio: 1 / 1;
     background-image: url('board.png');
     background-size: contain;
@@ -291,7 +265,7 @@ a {
     background-repeat: no-repeat;
     position: relative;
     border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
     
     display: grid;
     grid-template-columns: repeat(15, 1fr);
@@ -299,12 +273,12 @@ a {
 }
 
 /* ==========================================================================
-   4. TOKENS LAYER & HOVER MOTION EFFECTS
+   4. TOKENS LAYER & ANIMATION MECHANICS
    ========================================================================== */
 .token-wrapper {
-    width: 75%;
-    height: 75%;
-    margin: auto; /* Corrects positioning by locking the token directly to the cell center */
+    width: 80%;
+    height: 80%;
+    margin: auto; /* Locks token directly in the center grid box */
     position: relative;
     display: flex;
     justify-content: center;
@@ -313,54 +287,49 @@ a {
     cursor: pointer;
 }
 
-/* Formats rectangular image textures cleanly inside circular frames */
 .token-pawn-graphic {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: top center; /* Focuses texture directly on token profile */
+    object-position: top center;
     border-radius: 50%;
     border: 2px solid rgba(255, 255, 255, 0.9);
     position: relative;
     z-index: 2;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.4);
     animation: tokenBounce 2s infinite ease-in-out;
 }
 
-/* Glowing border highlights mapped per color scheme */
-.token-red .token-pawn-graphic { border-color: #ff4757; box-shadow: 0 0 10px #ff4757; }
-.token-green .token-pawn-graphic { border-color: #2ed573; box-shadow: 0 0 10px #2ed573; }
-.token-blue .token-pawn-graphic { border-color: #1e90ff; box-shadow: 0 0 10px #1e90ff; }
-.token-yellow .token-pawn-graphic { border-color: #ffa502; box-shadow: 0 0 10px #ffa502; }
+/* Online Glow Identifiers mapped per color rules */
+.token-red .token-pawn-graphic { border-color: #ff4757; box-shadow: 0 0 8px #ff4757; }
+.token-green .token-pawn-graphic { border-color: #2ed573; box-shadow: 0 0 8px #2ed573; }
+.token-blue .token-pawn-graphic { border-color: #1e90ff; box-shadow: 0 0 8px #1e90ff; }
+.token-yellow .token-pawn-graphic { border-color: #ffa502; box-shadow: 0 0 8px #ffa502; }
 
-/* THE MOVEMENT SHADOW: Shrinks automatically as the token steps upwards */
 .token-ambient-shadow {
     position: absolute;
-    width: 55%;
+    width: 60%;
     height: 15%;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.5);
     border-radius: 50%;
-    bottom: 1px;
+    bottom: 0px;
     z-index: 1;
     filter: blur(2px);
     animation: shadowScale 2s infinite ease-in-out;
 }
 
-/* Fallback shape styling if assets ever drop out */
 .fallback-circle {
     background-color: #333;
     border-radius: 50%;
     color: white;
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: 1rem;
     border: 2px solid white;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
 }
 
-/* Floating Bouncing Animation Mechanics */
 @keyframes tokenBounce {
     0%, 100% { transform: translateY(0px); }
-    50%      { transform: translateY(-6px); } /* Maximum lift value */
+    50%      { transform: translateY(-5px); }
 }
 
 @keyframes shadowScale {
@@ -369,82 +338,110 @@ a {
 }
 
 /* ==========================================================================
-   5. GAME CONTROLS INTERACTIVE SIDEBAR & DICE
+   5. COMPACT INTERACTIVE HORIZONTAL CONTROL DASHBOARD BAR
    ========================================================================== */
 .game-controls-sidebar {
-    width: 260px;
+    width: 92vw;
+    max-width: 440px;
     display: flex;
-    flex-direction: column;
-    gap: 15px;
-    height: 100%;
-    max-height: 600px;
+    flex-direction: row; /* Horizontal flex arrangement across phone viewports */
+    gap: 10px;
+    background: #1e1e2f;
+    padding: 10px;
+    border-radius: 12px;
 }
 
 .dice-box {
     background: #2a2a40;
-    padding: 25px 20px;
-    border-radius: 12px;
+    padding: 8px;
+    border-radius: 8px;
     text-align: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 8px;
+    flex: 1;
 }
 
-/* Flat Unicode Text Dice View */
 .dice-face {
-    font-size: 4.5rem;
+    font-size: 2.5rem;
     color: #ff4757;
     background: #13131a;
-    width: 90px;
-    height: 90px;
-    line-height: 85px;
+    width: 55px;
+    height: 55px;
+    line-height: 52px;
     text-align: center;
-    border-radius: 12px;
+    border-radius: 8px;
     border: 2px solid #3d3d5c;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
     user-select: none;
 }
 
-.roll-btn { 
-    width: 100%; 
-    background: #ff4757; 
-    color: white; 
+.roll-btn {
+    padding: 6px 12px;
+    font-size: 0.85rem;
 }
 
 .game-log {
-    flex: 1;
-    background: #1e1e2f;
-    border-radius: 12px;
-    padding: 15px;
+    flex: 1.6;
+    background: #13131a;
+    border-radius: 8px;
+    padding: 8px;
+    height: 105px;
     overflow-y: auto;
     font-family: monospace;
-    font-size: 0.85rem;
+    font-size: 0.72rem;
     border: 1px solid #3d3d5c;
     color: #a0a0b8;
 }
 
 .log-entry { 
-    margin: 5px 0; 
-    border-bottom: 1px solid #232338; 
-    padding-bottom: 4px; 
+    margin-bottom: 3px;
+    border-bottom: 1px solid #1e1e2f;
+    padding-bottom: 2px;
 }
 
 /* ==========================================================================
-   6. RESPONSIVE COMPONENT BREAKPOINTS
+   6. RESPONSIVE DESKTOP SCALE-UP ENHANCEMENTS BREAKPOINTS
    ========================================================================== */
-@media (max-width: 850px) {
+@media (min-width: 850px) {
     .game-arena { 
-        flex-direction: column; 
-        overflow-y: auto; 
+        flex-direction: row; /* Switch layout to horizontal columns on desktop layout side-by-side */
+        justify-content: center;
+        gap: 30px;
+        padding: 20px;
     }
     .ludo-board-wrapper { 
-        width: 95vw; 
-        height: 95vw; 
+        width: 78vh; 
+        height: 78vh;
+        max-width: 600px;
+        max-height: 600px;
     }
     .game-controls-sidebar { 
-        width: 100%; 
-        max-height: none; 
+        width: 280px; 
+        flex-direction: column; /* Vertical sidebar stack mode */
+        height: 78vh;
+        max-height: 600px;
+        padding: 15px;
+    }
+    .dice-box {
+        padding: 20px 10px;
+        flex: none;
+    }
+    .dice-face {
+        font-size: 4rem;
+        width: 85px;
+        height: 85px;
+        line-height: 80px;
+    }
+    .roll-btn {
+        padding: 10px;
+        font-size: 1rem;
+    }
+    .game-log {
+        height: auto;
+        flex: 1;
+    }
+    .turn-indicator {
+        font-size: 1.1rem;
     }
 }
