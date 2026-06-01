@@ -1,4 +1,4 @@
-/* --- LOGIN SCREEN STYLES --- */
+/* --- GLOBAL THEME LAYOUT --- */
 body {
     font-family: Arial, sans-serif;
     background-color: #1e1e2f;
@@ -40,27 +40,12 @@ button {
     margin-top: 10px;
 }
 
-button:hover {
-    background-color: #ff6b81;
-}
+button:hover { background-color: #ff6b81; }
+.toggle-text { margin-top: 15px; font-size: 0.9em; }
+a { color: #1e90ff; text-decoration: none; }
+.error-text { color: #ff4757; font-size: 0.85em; min-height: 20px; }
 
-.toggle-text {
-    margin-top: 15px;
-    font-size: 0.9em;
-}
-
-a {
-    color: #1e90ff;
-    text-decoration: none;
-}
-
-.error-text {
-    color: #ff4757;
-    font-size: 0.85em;
-    min-height: 20px;
-}
-
-/* --- DASHBOARD STYLES --- */
+/* --- DASHBOARD HUB STYLES --- */
 .dashboard-container {
     width: 100%;
     max-width: 800px;
@@ -82,159 +67,42 @@ a {
     border-bottom: 2px solid #3d3d5c;
 }
 
-.user-profile {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.avatar {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    background: #3d3d5c;
-    border: 2px solid #ff4757;
-}
-
-.user-info h3 {
-    margin: 0;
-    font-size: 1.1rem;
-}
-
-.status-badge {
-    font-size: 0.8rem;
-    color: #2ed573;
-}
+.user-profile { display: flex; align-items: center; gap: 15px; }
+.avatar { width: 55px; height: 55px; border-radius: 50%; background: #3d3d5c; border: 2px solid #ff4757; }
+.user-info h3 { margin: 0; font-size: 1.1rem; }
+.status-badge { font-size: 0.8rem; color: #2ed573; }
 
 .wallet-card {
     text-align: right;
     background: linear-gradient(135deg, #2ed573, #26af5f);
     padding: 10px 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(46, 213, 115, 0.3);
 }
 
-.wallet-label {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    opacity: 0.9;
-}
+.wallet-label { font-size: 0.75rem; text-transform: uppercase; opacity: 0.9; }
+.wallet-balance { margin: 0; font-size: 1.4rem; }
 
-.wallet-balance {
-    margin: 0;
-    font-size: 1.4rem;
-}
+.dashboard-tabs { display: flex; background: #232338; padding: 5px; }
+.tab-btn { flex: 1; background: transparent; border: none; color: #a0a0b8; padding: 15px; font-weight: bold; cursor: pointer; border-radius: 8px; text-align: center; }
+.tab-btn.active { background: #ff4757; color: white; }
+.tab-btn.logout { color: #ff4757; flex: 0.5; }
 
-.dashboard-tabs {
-    display: flex;
-    background: #232338;
-    padding: 5px;
-}
+.dashboard-content { flex: 1; padding: 20px; overflow-y: auto; }
+.tab-view { display: none; }
+.tab-view.active { display: block; }
 
-.tab-btn {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: #a0a0b8;
-    padding: 15px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border-radius: 8px;
-    text-align: center;
-}
+.lobby-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.rooms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+.room-card { background: #3d3d5c; padding: 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border-left: 5px solid #ffa502; }
+.room-details h4 { margin: 0 0 5px 0; }
+.room-details p { margin: 2px 0; font-size: 0.9rem; color: #a0a0b8; }
+.fee-text { color: #2ed573; font-weight: bold; }
 
-.tab-btn:active {
-    transform: scale(0.97);
-}
+.join-btn, .action-btn { background: #ffa502; color: #1e1e2f; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+.join-btn:hover, .action-btn:hover { filter: brightness(1.1); }
+.input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; text-align: left; }
 
-.tab-btn.active {
-    background: #ff4757;
-    color: white;
-}
-
-.tab-btn.logout {
-    color: #ff4757;
-    flex: 0.5;
-}
-
-.dashboard-content {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-}
-
-.tab-view {
-    display: none;
-}
-
-.tab-view.active {
-    display: block;
-}
-
-.lobby-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.rooms-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 15px;
-}
-
-.room-card {
-    background: #3d3d5c;
-    padding: 20px;
-    border-radius: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-left: 5px solid #ffa502;
-}
-
-.room-details h4 {
-    margin: 0 0 5px 0;
-}
-
-.room-details p {
-    margin: 2px 0;
-    font-size: 0.9rem;
-    color: #a0a0b8;
-}
-
-.fee-text {
-    color: #2ed573;
-    font-weight: bold;
-}
-
-.join-btn, .action-btn {
-    background: #ffa502;
-    color: #1e1e2f;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    min-height: 44px;
-}
-
-.join-btn:hover, .action-btn:hover {
-    filter: brightness(1.1);
-}
-
-.input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 15px;
-    text-align: left;
-}
-
-/* --- LIVE GAME SCREEN STYLES --- */
+/* --- LIVE MATCH STYLES & INTERACTIVE GRID --- */
 .game-screen-container {
     width: 100vw;
     height: 100vh;
@@ -252,20 +120,8 @@ a {
     border-bottom: 3px solid #ff4757;
 }
 
-.hud-back-btn {
-    background: #3d3d5c;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.turn-indicator {
-    font-size: 1.1rem;
-}
-
+.hud-back-btn { background: #3d3d5c; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+.turn-indicator { font-size: 1.1rem; }
 .turn-red { color: #ff4757; }
 
 .game-arena {
@@ -278,7 +134,7 @@ a {
     overflow: hidden;
 }
 
-/* 15x15 Responsive Grid Canvas overlaying your game asset background */
+/* 15x15 Matrix Canvas Mapping Wrapper */
 .ludo-board-wrapper {
     height: 90vh;
     max-height: 90vw;
@@ -296,26 +152,78 @@ a {
     grid-template-rows: repeat(15, 1fr);
 }
 
-/* Token asset sizing and layout rule sets */
-.token {
-    width: 84%;
-    height: 84%;
-    margin: 8%;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    border: 2px solid rgba(255, 255, 255, 0.85);
-    z-index: 10;
+/* --- 3D MOVING TOKENS STYLING RULES --- */
+.token-wrapper {
+    width: 90%;
+    height: 90%;
     align-self: center;
     justify-self: center;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
 }
 
-/* Accent borders to make individual pieces pop */
-.token-red { border-color: #ff4757; }
-.token-green { border-color: #2ed573; }
-.token-blue { border-color: #1e90ff; }
-.token-yellow { border-color: #ffa502; }
+/* High-performance fallback 3D crystalline capsule ring */
+.token-wrapper::before {
+    content: '';
+    position: absolute;
+    width: 75%;
+    height: 75%;
+    border-radius: 50%;
+    bottom: 4px;
+    box-sizing: border-box;
+    border: 2px solid white;
+    box-shadow: inset 0 2px 8px rgba(255,255,255,0.8), 0 4px 12px rgba(0,0,0,0.4);
+    animation: tokenFloat 2s infinite ease-in-out;
+}
 
+/* Specific glowing color schemes for base fallback capsule rings */
+.token-red::before { background: radial-gradient(circle at top, #ff6b81, #ff4757); }
+.token-green::before { background: radial-gradient(circle at top, #2ed573, #26af5f); }
+.token-blue::before { background: radial-gradient(circle at top, #54a0ff, #1e90ff); }
+.token-yellow::before { background: radial-gradient(circle at top, #ffeaa7, #ffa502); }
+
+/* Custom pawn graphics rendering logic layer */
+.token-graphic {
+    width: 80%;
+    height: 80%;
+    object-fit: cover;
+    border-radius: 50%;
+    position: relative;
+    z-index: 2;
+    animation: tokenFloat 2s infinite ease-in-out;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+/* THE MOVEMENT SHADOW: Reactive scaling shadow disk */
+.token-ambient-shadow {
+    position: absolute;
+    width: 60%;
+    height: 12%;
+    background: rgba(0, 0, 0, 0.65);
+    border-radius: 50%;
+    bottom: -1px;
+    z-index: 1;
+    filter: blur(2px);
+    animation: shadowContract 2s infinite ease-in-out;
+    transform-style: preserve-3d;
+}
+
+/* Continuous Floating Animations */
+@keyframes tokenFloat {
+    0%, 100% { transform: translateY(0px) scale(1); }
+    50%      { transform: translateY(-7px) scale(1.03); } /* Token rises up */
+}
+
+@keyframes shadowContract {
+    0%, 100% { transform: scale(1); opacity: 1; filter: blur(2px); }
+    50%      { transform: scale(0.7); opacity: 0.35; filter: blur(4px); } /* Shadow shrinks and blurs as token moves away */
+}
+
+
+/* --- TRUE 3D ENGINE CUBE DICE STYLES --- */
 .game-controls-sidebar {
     width: 260px;
     display: flex;
@@ -327,27 +235,61 @@ a {
 
 .dice-box {
     background: #2a2a40;
-    padding: 20px;
+    padding: 25px 20px;
     border-radius: 12px;
     text-align: center;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
 
-/* Classic clean Unicode text dice layout styling rules */
-.dice-face {
-    font-size: 5.5rem;
-    line-height: 1;
-    margin-bottom: 15px;
-    color: #ffa502;
-    user-select: none;
-    text-shadow: 0 0 15px rgba(255, 165, 2, 0.4);
+/* Perspective view portal */
+.dice-3d-scene {
+    width: 100px;
+    height: 100px;
+    perspective: 400px; /* Dictates real-world focal depth distortion */
+    margin: 10px 0;
 }
 
-.roll-btn {
+/* Core rotating body framework */
+.cube-dice {
     width: 100%;
-    background: #ff4757;
-    color: white;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d; /* Forces items to stay drawn in accurate depth planes */
+    transform: rotateX(0deg) rotateY(0deg);
+    transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.3, 1.05); /* Realistic physics deceleration curve */
 }
+
+/* Uniform layout styles across individual faces */
+.cube-face {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle at center, #ffffff, #eccc68);
+    border: 3px solid #ffa502;
+    color: #2f3542;
+    font-size: 5rem;
+    line-height: 94px;
+    text-align: center;
+    border-radius: 18px;
+    box-sizing: border-box;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.25), 0 0 10px rgba(255, 165, 2, 0.2);
+    user-select: none;
+}
+
+/* Spatial positioning offsets to convert flat squares into an enclosed cube */
+.front  { transform: rotateY(  0deg) translateZ(50px); }
+.back   { transform: rotateY(180deg) translateZ(50px); }
+.right  { transform: rotateY( 90deg) translateZ(50px); }
+.left   { transform: rotateY(-90deg) translateZ(50px); }
+.top    { transform: rotateX( 90deg) translateZ(50px); }
+.bottom { transform: rotateX(-90deg) translateZ(50px); }
+
+
+.roll-btn { width: 100%; background: #ff4757; color: white; }
 
 .game-log {
     flex: 1;
@@ -361,24 +303,11 @@ a {
     color: #a0a0b8;
 }
 
-.log-entry {
-    margin: 5px 0;
-    border-bottom: 1px solid #232338;
-    padding-bottom: 4px;
-}
+.log-entry { margin: 5px 0; border-bottom: 1px solid #232338; padding-bottom: 4px; }
 
 /* Responsiveness Rules */
 @media (max-width: 850px) {
-    .game-arena {
-        flex-direction: column;
-        overflow-y: auto;
-    }
-    .ludo-board-wrapper {
-        width: 95vw;
-        height: 95vw;
-    }
-    .game-controls-sidebar {
-        width: 100%;
-        max-height: none;
-    }
+    .game-arena { flex-direction: column; overflow-y: auto; }
+    .ludo-board-wrapper { width: 95vw; height: 95vw; }
+    .game-controls-sidebar { width: 100%; max-height: none; }
 }
