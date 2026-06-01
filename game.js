@@ -19,26 +19,38 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // Simple Interactive Dice Functionality for Testing
+    // Premium Asset Dice Functionality
     const diceBtn = document.getElementById('roll-dice-btn');
     const diceVisual = document.getElementById('visual-dice');
     const logContainer = document.querySelector('.game-log');
-    const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+    
+    // Exact mapping matching the image extensions you uploaded
+    const diceImages = [
+        'dice1.png',
+        'dice2.png',
+        'dice3.jpg',
+        'dice4.jpg',
+        'dice5.jpg',
+        'dice6.jpg'
+    ];
 
     diceBtn.addEventListener('click', () => {
         diceBtn.disabled = true;
+        diceVisual.classList.add('rolling-animation'); // Trigger CSS rotation/shake effect
         let rollCount = 0;
         
-        // Simulation Animation Roll Effect
+        // High-speed image rotation effect
         const rollInterval = setInterval(() => {
             const tempRoll = Math.floor(Math.random() * 6);
-            diceVisual.textContent = diceFaces[tempRoll];
+            diceVisual.src = diceImages[tempRoll];
             rollCount++;
 
-            if (rollCount > 8) {
+            if (rollCount > 12) {
                 clearInterval(rollInterval);
+                diceVisual.classList.remove('rolling-animation');
+                
                 const finalRoll = Math.floor(Math.random() * 6) + 1;
-                diceVisual.textContent = diceFaces[finalRoll - 1];
+                diceVisual.src = diceImages[finalRoll - 1]; // Set exact definitive final face
                 
                 // Print statement update to match feed
                 const p = document.createElement('p');
@@ -49,6 +61,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 diceBtn.disabled = false;
             }
-        }, 80);
+        }, 70); // Cycle speed in milliseconds
     });
 });

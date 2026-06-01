@@ -241,7 +241,7 @@ a {
     text-align: left;
 }
 
-/* --- LIVE GAME SCREEN STYLES (New Updates) --- */
+/* --- LIVE GAME SCREEN STYLES --- */
 .game-screen-container {
     width: 100vw;
     height: 100vh;
@@ -315,13 +315,33 @@ a {
     border-radius: 12px;
     text-align: center;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.dice-face {
-    font-size: 5rem;
-    margin-bottom: 10px;
-    color: #ffa502;
+/* New responsive styling rules for premium dice graphics */
+.dice-image {
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+    margin-bottom: 15px;
+    border-radius: 14px;
     user-select: none;
+    -webkit-user-drag: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.1s ease;
+}
+
+/* CSS dynamic blur/spin animation triggered when dice is rolled */
+.rolling-animation {
+    animation: spinAndBlur 0.15s infinite linear;
+}
+
+@keyframes spinAndBlur {
+    0% { transform: scale(0.95) rotate(0deg); filter: brightness(1.2); }
+    50% { transform: scale(1.05) rotate(180deg); }
+    100% { transform: scale(0.95) rotate(360deg); filter: brightness(1.2); }
 }
 
 .roll-btn {
@@ -361,6 +381,10 @@ a {
     .game-controls-sidebar {
         width: 100%;
         max-height: none;
+    }
+    .dice-image {
+        width: 110px;
+        height: 110px;
     }
 }
 
